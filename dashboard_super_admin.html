@@ -707,16 +707,16 @@
                                             <i class="fas fa-download me-1"></i> Export
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="console.log('CSV clicked'); exportChart('cropInsight', 'csv');">
+                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="exportChart('cropInsight', 'csv');">
                                                 <i class="fas fa-file-csv me-2"></i>Save as CSV
                                             </a></li>
-                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="console.log('PDF clicked'); exportChart('cropInsight', 'pdf');">
+                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="exportChart('cropInsight', 'pdf');">
                                                 <i class="fas fa-file-pdf me-2"></i>Save as PDF
                                             </a></li>
-                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="console.log('Word clicked'); exportChart('cropInsight', 'word');">
+                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="exportChart('cropInsight', 'word');">
                                                 <i class="fas fa-file-word me-2"></i>Save as Word
                                             </a></li>
-                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="console.log('Picture clicked'); exportChart('cropInsight', 'picture');">
+                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="exportChart('cropInsight', 'picture');">
                                                 <i class="fas fa-image me-2"></i>Save as Picture
                                             </a></li>
                                         </ul>
@@ -1167,18 +1167,10 @@
                 loadCommunityData();
                 initTopProductsChart(); // Initialize top products chart
                 
-                // Debug municipality sales
-                setTimeout(() => {
-                    if (window.debugMunicipalitySales) {
-                        console.log('🧪 Running municipality sales debug...');
-                        window.debugMunicipalitySales();
-                    }
-                }, 2000);
-                
                 // Initialize charts after supabaseClient is available
                 if (typeof Chart !== 'undefined') {
                     initializeCharts();
-                    console.log('Charts initialized successfully');
+
                 }
                 
                 // Load sales chart data after chart initialization
@@ -1191,7 +1183,7 @@
         // Profile loading functions
         async function loadCurrentUserProfile() {
             try {
-                console.log('=== LOADING CURRENT USER PROFILE ===');
+            // Load current user profile
                 
                 // Get current user from session storage (set during login)
                 const currentUser = JSON.parse(sessionStorage.getItem('currentUser') || '{}');
@@ -1204,7 +1196,7 @@
                     return;
                 }
                 
-                console.log('Found logged-in user with ID:', currentUser.id);
+
                 window.currentUserId = currentUser.id;
                 
                 // Fetch the actual user data from database using their ID
@@ -1263,7 +1255,7 @@
         // Fallback function to load any user for testing
         async function loadFirstUserForTesting() {
             try {
-                console.log('=== LOADING FIRST USER FOR TESTING ===');
+            // Load first user for testing
                 
                 if (!supabaseClient) {
                     console.error('Supabase client not available, using fallback data');
@@ -1334,8 +1326,7 @@
         }
 
         function updateProfileDisplay(userData) {
-            console.log('=== UPDATING PROFILE DISPLAY ===');
-            console.log('Updating profile display with data:', userData);
+            // Update profile display with user data
             
             // Update profile name
             const profileName = document.getElementById('profileUserName');
@@ -1376,7 +1367,7 @@
             }
             
             // Update profile images
-            console.log('=== PROCESSING PROFILE IMAGE ===');
+            // Processing profile image
             console.log('Raw image URL from database:', userData.image_url);
             
             if (userData.image_url && userData.image_url.trim() !== '' && userData.image_url !== 'null') {
@@ -1448,13 +1439,13 @@
                 }
             }
             
-            console.log('=== PROFILE DISPLAY UPDATE COMPLETE ===');
+            // Profile display update complete
         }
 
         // Function to load active users count from database
         async function loadActiveUsersCount() {
             try {
-                console.log('=== LOADING ACTIVE USERS COUNT ===');
+            // Loading active users count
                 
                 if (!supabaseClient) {
                     console.error('Supabase client not available');
@@ -1587,14 +1578,6 @@
             users.forEach(user => {
                 const row = document.createElement('tr');
                 
-                // DEBUG: Log raw password data for first user
-                if (user.full_name === 'Cindy Nagutom') {
-                    console.log('🔍 DEBUG - Cindy Nagutom password data:');
-                    console.log('password_encrypted:', user.password_encrypted);
-                    console.log('password_hash:', user.password_hash);
-                    console.log('All user data:', user);
-                }
-                
                 // Decrypt password from password_encrypted or password_hash field
                 let passwordDisplay = '<span style="color: #999;">Not Available</span>';
                 let plainPassword = null;
@@ -1681,73 +1664,6 @@
 
         // Function to load and display municipality sales data
         // Debug function for municipality sales
-        window.debugMunicipalitySales = async function() {
-            console.log('🧪 === DEBUGGING MUNICIPALITY SALES ===');
-            
-            if (!supabaseClient) {
-                console.error('❌ Supabase client not available');
-                return;
-            }
-
-            try {
-                // Test 1: Check store-owner table
-                console.log('🧪 Test 1: Checking store-owner table...');
-                const { data: sellers, error: sellersError } = await supabaseClient
-                    .from('store-owner')
-                    .select('user_id')
-                    .limit(10);
-                
-                console.log('🧪 Sellers result:', { data: sellers, error: sellersError });
-
-                if (sellers && sellers.length > 0) {
-                    // Test 2: Check users table for these sellers
-                    console.log('🧪 Test 2: Checking users table...');
-                    const sellerIds = sellers.map(s => s.user_id);
-                    const { data: users, error: usersError } = await supabaseClient
-                        .from('users')
-                        .select('id, full_name, municipality')
-                        .in('id', sellerIds);
-                    
-                    console.log('🧪 Users result:', { data: users, error: usersError });
-                    
-                    if (users) {
-                        const withMunicipality = users.filter(u => u.municipality);
-                        console.log(`🧪 Users with municipality: ${withMunicipality.length} of ${users.length}`);
-                        console.log('🧪 Sample:', withMunicipality.slice(0, 3));
-                    }
-                }
-
-                // Test 3: Check completed orders
-                console.log('🧪 Test 3: Checking completed orders...');
-                const { data: orders, error: ordersError } = await supabaseClient
-                    .from('orders')
-                    .select('id, total, status')
-                    .limit(10);
-                
-                console.log('🧪 All orders result:', { data: orders, error: ordersError });
-                
-                if (orders && orders.length > 0) {
-                    const statusCounts = {};
-                    orders.forEach(order => {
-                        statusCounts[order.status] = (statusCounts[order.status] || 0) + 1;
-                    });
-                    console.log('🧪 Order statuses found:', statusCounts);
-                    
-                    // Test completed orders specifically
-                    const { data: completedOrders, error: completedError } = await supabaseClient
-                        .from('orders')
-                        .select('id, total, status')
-                        .eq('status', 'completed')
-                        .limit(5);
-                    
-                    console.log('🧪 Completed orders result:', { data: completedOrders, error: completedError });
-                }
-
-            } catch (error) {
-                console.error('🧪 Debug error:', error);
-            }
-        };
-
         async function loadMunicipalitySalesData() {
             try {
                 console.log('🚀 === LOADING MUNICIPALITY SALES DATA ===');
@@ -4227,7 +4143,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
         
         // Debug function to check crop data
         function testCropData() {
-            console.log('🧪 Testing crop insight data:');
+            // Test crop insight data:
             console.log('Data exists:', !!currentCropInsightData);
             if (currentCropInsightData) {
                 console.log('Labels:', currentCropInsightData.labels);
@@ -6861,12 +6777,14 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 updateStocksChart(this.value);
             });
         }
-
         // Logout Function
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            window.location.href = 'index.html';
+        }
 
-    </script>
-</body>
-</html>
+        function exportChart(chartType, format) {
+            const chartMap = {
                 'sales': salesChart,
                 'stocks': stocksChart,
                 'soil': soilChart,
@@ -6993,31 +6911,160 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
         }
 
         function exportToPDF(chartType, filename) {
-            const canvas = document.querySelector('#' + chartType + 'Chart');
-            if (canvas) {
-                html2canvas(canvas).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF();
-                    const imgWidth = 210;
-                    const pageHeight = 295;
-                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                    let heightLeft = imgHeight;
-                    let position = 0;
-                    
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                    
-                    while (heightLeft >= 0) {
-                        position = heightLeft - imgHeight;
-                        pdf.addPage();
-                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                        heightLeft -= pageHeight;
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Set document properties
+            let yPosition = 20;
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const leftMargin = 15;
+            const rightMargin = 15;
+            const contentWidth = pageWidth - leftMargin - rightMargin;
+            
+            // Title
+            doc.setFontSize(18);
+            doc.setFont(undefined, 'bold');
+            doc.text(`${chartType.charAt(0).toUpperCase() + chartType.slice(1)} Analytics Report`, leftMargin, yPosition);
+            yPosition += 10;
+            
+            // Report info
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Report Generated: ${new Date().toLocaleDateString('en-PH', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })}`, leftMargin, yPosition);
+            yPosition += 7;
+            doc.text(`Chart Type: ${chartType.charAt(0).toUpperCase() + chartType.slice(1)}`, leftMargin, yPosition);
+            yPosition += 15;
+            
+            // Generate data table based on chart type
+            let headers, data;
+            
+            switch(chartType) {
+                case 'sales':
+                    if (currentSalesData) {
+                        doc.setFontSize(14);
+                        doc.setFont(undefined, 'bold');
+                        doc.text('Sales Data Table', leftMargin, yPosition);
+                        yPosition += 10;
+                        
+                        headers = [['Period', 'Sales Amount (PHP)']];
+                        data = [];
+                        let total = 0;
+                        
+                        currentSalesData.labels.forEach((label, index) => {
+                            const value = currentSalesData.data[index] || 0;
+                            total += value;
+                            const formattedValue = new Intl.NumberFormat('en-PH', {
+                                style: 'currency',
+                                currency: 'PHP',
+                                minimumFractionDigits: 2
+                            }).format(value);
+                            data.push([label, formattedValue]);
+                        });
+                        
+                        // Add total row
+                        const formattedTotal = new Intl.NumberFormat('en-PH', {
+                            style: 'currency',
+                            currency: 'PHP',
+                            minimumFractionDigits: 2
+                        }).format(total);
+                        data.push(['Total', formattedTotal]);
                     }
+                    break;
                     
-                    pdf.save(filename + '.pdf');
-                });
+                case 'stocks':
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Stocks Data Table', leftMargin, yPosition);
+                    yPosition += 10;
+                    
+                    // Get products data - try multiple sources
+                    let productsData = window.lastFetchedProductsForExport 
+                        || analyticsData?.stocks?.category?.products 
+                        || null;
+                    
+                    headers = [['Product Name', 'Stock Quantity', 'Category', 'Status']];
+                    data = [];
+                    
+                    if (productsData && Array.isArray(productsData)) {
+                        productsData.forEach(product => {
+                            const name = product.name || 'Unnamed Product';
+                            const qty = product.quantity || 0;
+                            const cat = product.category || 'Unknown';
+                            const status = qty > 0 ? 'In Stock' : 'Out of Stock';
+                            data.push([name, qty.toString(), cat, status]);
+                        });
+                    } else if (analyticsData?.stocks?.category?.labels) {
+                        analyticsData.stocks.category.labels.forEach((label, index) => {
+                            const value = analyticsData.stocks.category.data[index] || 0;
+                            data.push([label, value.toString(), 'Category Data', 'Available']);
+                        });
+                    }
+                    break;
+                    
+                case 'soil':
+                    if (analyticsData?.soil?.type) {
+                        doc.setFontSize(14);
+                        doc.setFont(undefined, 'bold');
+                        doc.text('Soil Type Distribution', leftMargin, yPosition);
+                        yPosition += 10;
+                        
+                        headers = [['Soil Type', 'Percentage (%)']];
+                        data = [];
+                        
+                        analyticsData.soil.type.labels.forEach((label, index) => {
+                            const percentage = analyticsData.soil.type.data[index] || 0;
+                            data.push([label, percentage.toFixed(1) + '%']);
+                        });
+                    }
+                    break;
+                    
+                case 'hectare':
+                    if (analyticsData?.hectare?.monthly) {
+                        doc.setFontSize(14);
+                        doc.setFont(undefined, 'bold');
+                        doc.text('Land Area Data', leftMargin, yPosition);
+                        yPosition += 10;
+                        
+                        headers = [['Period', 'Hectares', 'Square Meters', 'Meters']];
+                        data = [];
+                        
+                        analyticsData.hectare.monthly.labels.forEach((label, index) => {
+                            const hectares = analyticsData.hectare.monthly.hectares ? analyticsData.hectare.monthly.hectares[index] : 0;
+                            const squareMeters = analyticsData.hectare.monthly.squareMeters ? analyticsData.hectare.monthly.squareMeters[index] : 0;
+                            const meters = analyticsData.hectare.monthly.meters ? analyticsData.hectare.monthly.meters[index] : 0;
+                            data.push([label, hectares.toString(), squareMeters.toString(), meters.toString()]);
+                        });
+                    }
+                    break;
+                    
+                default:
+                    doc.text('No data available for export', leftMargin, yPosition);
+                    doc.save(filename + '.pdf');
+                    return;
             }
+            
+            if (headers && data && data.length > 0) {
+                doc.autoTable({
+                    startY: yPosition,
+                    head: headers,
+                    body: data,
+                    theme: 'grid',
+                    headStyles: { fillColor: [40, 167, 69], textColor: 255, fontStyle: 'bold' },
+                    footStyles: { fillColor: [233, 236, 239], textColor: 0, fontStyle: 'bold' },
+                    margin: { left: leftMargin, right: rightMargin },
+                    styles: { fontSize: 9 }
+                });
+            } else {
+                doc.text('No data available for this chart type', leftMargin, yPosition);
+            }
+            
+            doc.save(filename + '.pdf');
         }
 
         function exportToWord(chartType, filename) {
@@ -7356,4 +7403,3 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
     </script>
 </body>
 </html>
-

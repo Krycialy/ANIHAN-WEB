@@ -224,10 +224,8 @@
                         <table class="table table-striped">
                             <thead class="table-success">
                                 <tr>
-                                    <th>Store Name</th>
+                                    <th>Full Name</th>
                                     <th>Municipality</th>
-                                    <th>Crops Type</th>
-                                    <th>Land Size</th>
                                     <th>Application Date</th>
                                     <th>Status</th>
                                     <th>Actions</th>
@@ -538,10 +536,10 @@
 
             const rows = tableBody.querySelectorAll('tr');
             rows.forEach(row => {
-                const storeName = row.cells[0]?.textContent.toLowerCase() || '';
+                const fullName = row.cells[0]?.textContent.toLowerCase() || '';
                 const municipality = row.cells[1]?.textContent.toLowerCase() || '';
                 
-                if (storeName.includes(searchTerm) || municipality.includes(searchTerm)) {
+                if (fullName.includes(searchTerm) || municipality.includes(searchTerm)) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
@@ -836,7 +834,7 @@
             if (!tableBody) return;
 
             if (!applications || applications.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No pending applications found</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No pending applications found</td></tr>';
                 if (countSpan) countSpan.textContent = '0 applications found';
                 return;
             }
@@ -846,15 +844,14 @@
             applications.forEach(app => {
                 const row = document.createElement('tr');
                 
-                const municipality = app.users?.municipality || app.users?.Municipality || 'N/A';
+                const municipality = app.municipality || 'N/A';
+                const barangay = app.barangay || 'N/A';
+                const address = app.address || 'N/A';
                 const createdDate = app.created_at ? new Date(app.created_at).toLocaleDateString() : 'N/A';
-                const landSize = app.land_size ? `${app.land_size} ha` : 'N/A';
 
                 row.innerHTML = `
-                    <td><strong>${app.store_name || 'N/A'}</strong></td>
-                    <td>${municipality}</td>
-                    <td>${app.crops_type || 'N/A'}</td>
-                    <td>${landSize}</td>
+                    <td><strong>${app.full_name || 'N/A'}</strong></td>
+                    <td>${app.municipality || 'N/A'}</td>
                     <td>${createdDate}</td>
                     <td><span class="badge bg-warning">Pending</span></td>
                     <td>
@@ -893,13 +890,15 @@
             if (!window.allPendingApplications) return;
 
             const filtered = window.allPendingApplications.filter(app => {
-                const storeName = (app.store_name || '').toLowerCase();
-                const municipality = (app.users?.municipality || app.users?.Municipality || '').toLowerCase();
-                const cropsType = (app.crops_type || '').toLowerCase();
+                const fullName = (app.full_name || '').toLowerCase();
+                const municipality = (app.municipality || '').toLowerCase();
+                const barangay = (app.barangay || '').toLowerCase();
+                const address = (app.address || '').toLowerCase();
                 
-                return storeName.includes(searchTerm) || 
+                return fullName.includes(searchTerm) || 
                        municipality.includes(searchTerm) || 
-                       cropsType.includes(searchTerm);
+                       barangay.includes(searchTerm) ||
+                       address.includes(searchTerm);
             });
 
             updateAllApplicationsTable(filtered);
@@ -1201,7 +1200,20 @@
                 document.getElementById('modal_email').textContent = userData.email || 'N/A';
                 document.getElementById('modal_municipality').textContent = userData.municipality || 'N/A';
                 document.getElementById('modal_barangay').textContent = userData.barangay || 'N/A';
-                document.getElementById('modal_address').textContent = userData.address || 'N/A';
+                
+                // Combine address, barangay, and municipality for the address field
+                let combinedAddress = [];
+                if (userData.address && userData.address.trim() !== '') {
+                    combinedAddress.push(userData.address);
+                }
+                if (userData.barangay && userData.barangay.trim() !== '') {
+                    combinedAddress.push(userData.barangay);
+                }
+                if (userData.municipality && userData.municipality.trim() !== '') {
+                    combinedAddress.push(userData.municipality);
+                }
+                
+                document.getElementById('modal_address').textContent = combinedAddress.length > 0 ? combinedAddress.join(', ') : 'N/A';
                 
                 // Status badge
                 let statusBadge = '';

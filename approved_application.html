@@ -301,7 +301,7 @@
                         <table class="table table-striped">
                             <thead class="table-success">
                                 <tr>
-                                    <th>Store Name</th>
+                                    <th>Full Name</th>
                                     <th>Municipality</th>
                                     <th>Status</th>
                                     <th>Date Processed</th>
@@ -310,7 +310,7 @@
                             </thead>
                             <tbody id="allApplicationsTableBody">
                                 <tr>
-                                    <td colspan="6" class="text-center">Loading applications...</td>
+                                    <td colspan="5" class="text-center">Loading applications...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -599,7 +599,20 @@
             document.getElementById('modalPassword').textContent = password;
             document.getElementById('modalMunicipality').textContent = app.municipality || 'Not specified';
             document.getElementById('modalBarangay').textContent = app.barangay || 'Not specified';
-            document.getElementById('modalAddress').textContent = app.address || 'Not specified';
+            
+            // Combine address, barangay, and municipality for the address field
+            let combinedAddress = [];
+            if (app.address && app.address.trim() !== '') {
+                combinedAddress.push(app.address);
+            }
+            if (app.barangay && app.barangay.trim() !== '') {
+                combinedAddress.push(app.barangay);
+            }
+            if (app.municipality && app.municipality.trim() !== '') {
+                combinedAddress.push(app.municipality);
+            }
+            
+            document.getElementById('modalAddress').textContent = combinedAddress.length > 0 ? combinedAddress.join(', ') : 'Not specified';
             document.getElementById('modalStatus').textContent = statusText;
             document.getElementById('modalDate').textContent = app.created_at ? new Date(app.created_at).toLocaleDateString() : 'Not specified';
             
@@ -704,19 +717,9 @@
                         break;
                 }
                 
-                // Check what municipality field exists
-                let municipalityDisplay = 'No Municipality Data';
-                if (app.users) {
-                    municipalityDisplay = app.users.municipality || 
-                                        app.users.Municipality || 
-                                        app.users.city || 
-                                        app.users.location || 
-                                        'No Municipality Data';
-                }
-                
                 row.innerHTML = `
-                    <td data-label="Store Name">${app.store_name || 'N/A'}</td>
-                    <td data-label="Municipality">${municipalityDisplay}</td>
+                    <td data-label="Full Name">${app.full_name || 'N/A'}</td>
+                    <td data-label="Municipality">${app.municipality || 'N/A'}</td>
                     <td data-label="Status">${statusBadge}</td>
                     <td data-label="Date Processed">${app.created_at ? new Date(app.created_at).toLocaleDateString() : 'N/A'}</td>
                     <td data-label="Actions">
