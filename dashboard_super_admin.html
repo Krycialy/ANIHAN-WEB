@@ -624,9 +624,6 @@
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5>Soil Analytics</h5>
                                 <div class="chart-controls">
-                                    <select class="form-select form-select-sm me-2" id="soilFilter" style="width: 100px;">
-                                        <option value="type">Soil Type</option>
-                                    </select>
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
                                             <i class="fas fa-bars"></i>
@@ -4102,9 +4099,30 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
         let filteredAnalytics = [...allAnalytics];
 
         // Export Functions (Dashboard Style)
-        function exportChart(chartType, format) {
+        async function exportChart(chartType, format) {
             try {
-                console.log('🎯 exportChart called with:', chartType, format);
+                console.log('========================================');
+                console.log('🎯 EXPORT STARTED');
+                console.log('📊 Chart Type:', chartType);
+                console.log('📄 Format:', format);
+                console.log('========================================');
+                console.log('🔍 === DATA AVAILABILITY CHECK ===');
+                console.log('🌾 currentCropInsightData:', {
+                    exists: !!currentCropInsightData,
+                    hasFullData: !!currentCropInsightData?.fullData,
+                    fullDataLength: currentCropInsightData?.fullData?.length || 0,
+                    hasLabels: currentCropInsightData?.labels?.length || 0,
+                    period: currentCropInsightData?.period,
+                    filter: currentCropInsightData?.filter
+                });
+                console.log('🏆 currentTopProductsData:', {
+                    exists: !!currentTopProductsData,
+                    hasProducts: !!currentTopProductsData?.products,
+                    productsLength: currentTopProductsData?.products?.length || 0,
+                    period: currentTopProductsData?.period,
+                    municipality: currentTopProductsData?.municipality
+                });
+                console.log('🔍 === END DATA CHECK ===');
                 
                 const chartMap = {
                     sales: salesChart,
@@ -4123,13 +4141,13 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 
                 switch(format) {
                     case 'csv':
-                        exportToCSV(chartType, filename);
+                        await exportToCSV(chartType, filename);
                         break;
                     case 'pdf':
-                        exportToPDF(chartType, filename);
+                        await exportToPDF(chartType, filename);
                         break;
                     case 'word':
-                        exportToWord(chartType, filename);
+                        exportToWord(chartType, filename);  // Don't await - it handles promises internally
                         break;
                     case 'picture':
                         exportToPicture(chartType, filename);
@@ -4156,13 +4174,60 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             }
         }
 
-        function exportToCSV(chartType, filename) {
+        // NEW: Comprehensive debug function
+        function debugExportData() {
+            console.log('🔍 === EXPORT DATA DEBUG ===');
+            
+            // Check chart objects
+            console.log('Charts available:', {
+                cropInsightChart: !!window.cropInsightChart,
+                topProductsChart: !!window.topProductsChart
+            });
+            
+            // Check crop insight chart data
+            if (window.cropInsightChart) {
+                console.log('Crop Insight Chart Data:', window.cropInsightChart.data);
+                if (window.cropInsightChart.data) {
+                    console.log('  Labels:', window.cropInsightChart.data.labels);
+                    console.log('  Datasets:', window.cropInsightChart.data.datasets?.map(d => ({
+                        label: d.label,
+                        data: d.data,
+                        dataLength: d.data?.length
+                    })));
+                }
+            }
+            
+            // Check stored data
+            console.log('Stored Data:', {
+                currentCropInsightData: window.currentCropInsightData,
+                currentTopProductsData: window.currentTopProductsData
+            });
+            
+            // Check if chart is rendered
+            const chartElement = document.getElementById('cropInsightChart');
+            console.log('Chart element exists:', !!chartElement);
+            if (chartElement) {
+                console.log('Chart element dimensions:', {
+                    width: chartElement.offsetWidth,
+                    height: chartElement.offsetHeight
+                });
+            }
+            
+            console.log('🔍 === END DEBUG ===');
+        }
+        
+
+        
+
+        
+
+
+        async function exportToCSV(chartType, filename) {
             let csv = '';
             let headers = '';
             let dataRows = '';
             
             console.log('📥 Exporting CSV for:', chartType);
-            console.log('Current crop insight data:', currentCropInsightData);
             
             if (chartType === 'sales' && currentSalesData) {
                 // Use real sales data
@@ -4173,32 +4238,30 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 });
                 csv = headers + dataRows;
             } else if (chartType === 'cropInsight') {
-                console.log('🌾 Processing crop insight export...');
+                console.log('🌾 Processing crop insight CSV export...');
+                console.log('🌾 currentCropInsightData:', currentCropInsightData);
+                console.log('🌾 currentCropInsightData exists?', !!currentCropInsightData);
+                console.log('🌾 fullData exists?', !!currentCropInsightData?.fullData);
+                console.log('🌾 fullData length:', currentCropInsightData?.fullData?.length || 0);
                 
-                if (!currentCropInsightData) {
-                    console.error('❌ No crop insight data available!');
-                    alert('No crop data available to export. Please wait for the chart to load.');
-                    return;
+                if (currentCropInsightData && currentCropInsightData.fullData) {
+                    const periodFilter = document.getElementById('cropInsightPeriodFilter')?.value || 'monthly';
+                    const filter = document.getElementById('cropInsightFilter')?.value || 'all';
+                    const periodLabel = periodFilter === 'weekly' ? 'Weekly' : periodFilter === 'yearly' ? 'Yearly' : 'Monthly';
+                    const filterLabel = filter === 'all' ? 'All Crops' : filter === 'top10' ? 'Top 10 Crops' : 'Overproduced Only';
+                    
+                    csv = `Crop Production Analysis\nPeriod: ${periodLabel}\nFilter: ${filterLabel}\n\nCrop Name,Harvested (tons),Overproduction (tons),Land Cultivated,Land Unit\n`;
+                    currentCropInsightData.fullData.forEach(crop => {
+                        csv += `${crop.crop},${crop.harvest.toFixed(2)},${crop.overproduction.toFixed(2)},${crop.landCultivated.toFixed(2)},${crop.landUnit}\n`;
+                    });
+                    console.log('✅ Crop insight CSV prepared with', currentCropInsightData.fullData.length, 'crops');
+                } else {
+                    console.error('❌❌❌ CRITICAL: No crop insight data available!');
+                    console.error('❌ currentCropInsightData is:', currentCropInsightData);
+                    alert('ERROR: Crop insight data not loaded yet. Please wait for the chart to finish loading and try again.');
+                    csv = 'Crop Name,Harvested (tons),Overproduction (tons),Land Cultivated,Land Unit\n"No data available",0,0,0,ha\n';
                 }
-                
-                const period = currentCropInsightData.period || 'Monthly';
-                const filter = currentCropInsightData.filter || 'All';
-                const periodLabel = period.charAt(0).toUpperCase() + period.slice(1);
-                const filterLabel = filter === 'all' ? 'All Crops' : filter === 'top10' ? 'Top 10 Crops' : 'Overproduced Only';
-                
-                console.log(`✅ Exporting crop insight data (${periodLabel} - ${filterLabel})...`);
-                // Export crop insight data with period and filter info
-                headers = `Period: ${periodLabel}\nFilter: ${filterLabel}\n\nCrop Name,Harvested (tons),Overproduction (tons),Total Production (tons),Land Cultivated,Unit\n`;
-                currentCropInsightData.labels.forEach((label, index) => {
-                    const harvest = currentCropInsightData.harvest[index] || 0;
-                    const overproduction = currentCropInsightData.overproduction[index] || 0;
-                    const total = harvest + overproduction;
-                    const landCultivated = currentCropInsightData.landCultivated[index] || 0;
-                    const unit = currentCropInsightData.landUnits[index] || 'ha';
-                    dataRows += `${label},${harvest.toFixed(2)},${overproduction.toFixed(2)},${total.toFixed(2)},${landCultivated.toLocaleString()},${unit}\n`;
-                });
-                csv = headers + dataRows;
-                console.log('📊 CSV content preview:', csv.substring(0, 200));
+
             } else if (chartType === 'stocks') {
                 console.log('📦 Processing stocks export...');
                 
@@ -4264,26 +4327,30 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     });
                 }
                 csv = headers + dataRows;
-            } else if (chartType === 'topProducts' && currentTopProductsData) {
-                console.log('🏆 Processing top products export...');
+            } else if (chartType === 'topProducts') {
+                console.log('🏆 Processing top products CSV export...');
+                console.log('🏆 currentTopProductsData:', currentTopProductsData);
+                console.log('🏆 currentTopProductsData exists?', !!currentTopProductsData);
+                console.log('🏆 products exists?', !!currentTopProductsData?.products);
+                console.log('🏆 products length:', currentTopProductsData?.products?.length || 0);
                 
-                const period = currentTopProductsData.period === 'weekly' ? 'Weekly' : currentTopProductsData.period === 'yearly' ? 'Yearly' : 'Monthly';
-                const municipality = currentTopProductsData.municipality === 'all' ? 'All Municipalities' : currentTopProductsData.municipality;
-                const limit = currentTopProductsData.limit === 'all' ? 'All Products' : `Top ${currentTopProductsData.limit}`;
-                
-                headers = `Top Selling Products\nPeriod: ${period}\nMunicipality: ${municipality}\nShowing: ${limit}\n\nRank,Product Name,Category,Units Sold,Revenue (PHP),Number of Orders\n`;
-                
-                currentTopProductsData.products.forEach((product, index) => {
-                    const rank = index + 1;
-                    const name = product.productName || 'Unknown';
-                    const category = product.category || 'Unknown';
-                    const sold = product.totalSold || 0;
-                    const revenue = product.totalRevenue || 0;
-                    const orders = product.orderCount || 0;
-                    dataRows += `${rank},"${name}","${category}",${sold},${revenue.toFixed(2)},${orders}\n`;
-                });
-                csv = headers + dataRows;
-                console.log('📊 Top products CSV preview:', csv.substring(0, 200));
+                if (currentTopProductsData && currentTopProductsData.products) {
+                    const periodFilter = currentTopProductsData.period || 'monthly';
+                    const municipalityFilter = currentTopProductsData.municipality || 'all';
+                    const periodLabel = periodFilter === 'weekly' ? 'Weekly' : periodFilter === 'yearly' ? 'Yearly' : 'Monthly';
+                    const municipalityLabel = municipalityFilter === 'all' ? 'All Municipalities' : municipalityFilter;
+                    
+                    csv = `Top Selling Products Report\nPeriod: ${periodLabel}\nMunicipality: ${municipalityLabel}\n\nProduct Name,Category,Total Sold,Total Revenue (₱),Order Count\n`;
+                    currentTopProductsData.products.forEach(product => {
+                        csv += `"${product.productName}","${product.category}",${product.totalSold},${product.totalRevenue.toFixed(2)},${product.orderCount}\n`;
+                    });
+                    console.log('✅ Top products CSV prepared with', currentTopProductsData.products.length, 'products');
+                } else {
+                    console.error('❌❌❌ CRITICAL: No top products data available!');
+                    console.error('❌ currentTopProductsData is:', currentTopProductsData);
+                    alert('ERROR: Top products data not loaded yet. Please wait for the chart to finish loading and try again.');
+                    csv = 'Product Name,Category,Total Sold,Total Revenue (₱),Order Count\n"No data available","Unknown",0,0,0\n';
+                }
             } else {
                 console.log('⚠️ Using fallback export for:', chartType);
                 // Fallback to chart data for other chart types
@@ -4325,7 +4392,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             window.URL.revokeObjectURL(url);
         }
 
-        function exportToPDF(chartType, filename) {
+        async function exportToPDF(chartType, filename) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
@@ -4398,61 +4465,64 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     footStyles: { fillColor: [233, 236, 239], textColor: 0, fontStyle: 'bold' },
                     margin: { left: leftMargin, right: rightMargin }
                 });
-            } else if (chartType === 'cropInsight' && currentCropInsightData) {
-                const period = currentCropInsightData.period || 'Monthly';
-                const filter = currentCropInsightData.filter || 'All';
-                const periodLabel = period.charAt(0).toUpperCase() + period.slice(1);
-                const filterLabel = filter === 'all' ? 'All Crops' : filter === 'top10' ? 'Top 10 Crops' : 'Overproduced Only';
+            } else if (chartType === 'cropInsight') {
+                console.log('📄 Processing crop insight PDF export...');
+                console.log('🌾 currentCropInsightData:', currentCropInsightData);
                 
-                doc.setFontSize(14);
-                doc.setFont(undefined, 'bold');
-                doc.text(`Crop Insight Data Table (${periodLabel} - ${filterLabel})`, leftMargin, yPosition);
-                yPosition += 10;
-                
-                const headers = [['Crop Name', 'Harvested (tons)', 'Overproduction (tons)', 'Total (tons)', 'Land Cultivated']];
-                const data = [];
-                let totalHarvest = 0;
-                let totalOverproduction = 0;
-                let totalProduction = 0;
-                
-                currentCropInsightData.labels.forEach((label, index) => {
-                    const harvest = currentCropInsightData.harvest[index] || 0;
-                    const overproduction = currentCropInsightData.overproduction[index] || 0;
-                    const total = harvest + overproduction;
-                    const landCultivated = currentCropInsightData.landCultivated[index] || 0;
-                    const unit = currentCropInsightData.landUnits[index] || 'ha';
+                if (currentCropInsightData && currentCropInsightData.fullData) {
+                    const periodFilter = document.getElementById('cropInsightPeriodFilter')?.value || 'monthly';
+                    const filter = document.getElementById('cropInsightFilter')?.value || 'all';
+                    const periodLabel = periodFilter === 'weekly' ? 'Weekly' : periodFilter === 'yearly' ? 'Yearly' : 'Monthly';
+                    const filterLabel = filter === 'all' ? 'All Crops' : filter === 'top10' ? 'Top 10 Crops' : 'Overproduced Only';
                     
-                    totalHarvest += harvest;
-                    totalOverproduction += overproduction;
-                    totalProduction += total;
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`Crop Insight Data Table (${periodLabel} - ${filterLabel})`, leftMargin, yPosition);
+                    yPosition += 10;
                     
+                    const headers = [['Crop Name', 'Harvested (tons)', 'Overproduction (tons)', 'Land Cultivated', 'Unit']];
+                    const data = [];
+                    let totalHarvest = 0;
+                    let totalOverproduction = 0;
+                    
+                    currentCropInsightData.fullData.forEach(crop => {
+                        totalHarvest += crop.harvest;
+                        totalOverproduction += crop.overproduction;
+                        
+                        data.push([
+                            crop.crop,
+                            crop.harvest.toFixed(2),
+                            crop.overproduction.toFixed(2),
+                            crop.landCultivated.toFixed(2),
+                            crop.landUnit
+                        ]);
+                    });
+                    
+                    const totalProduction = totalHarvest + totalOverproduction;
                     data.push([
-                        label,
-                        harvest.toFixed(2),
-                        overproduction.toFixed(2),
-                        total.toFixed(2),
-                        `${landCultivated.toLocaleString()} ${unit}`
+                        'Total',
+                        totalHarvest.toFixed(2),
+                        totalOverproduction.toFixed(2),
+                        `Total: ${totalProduction.toFixed(2)} tons`,
+                        ''
                     ]);
-                });
-                
-                data.push([
-                    'Total',
-                    totalHarvest.toFixed(2),
-                    totalOverproduction.toFixed(2),
-                    totalProduction.toFixed(2),
-                    '-'
-                ]);
-                
-                doc.autoTable({
-                    startY: yPosition,
-                    head: headers,
-                    body: data,
-                    theme: 'grid',
-                    headStyles: { fillColor: [40, 167, 69], textColor: 255, fontStyle: 'bold' },
-                    footStyles: { fillColor: [233, 236, 239], textColor: 0, fontStyle: 'bold' },
-                    margin: { left: leftMargin, right: rightMargin },
-                    styles: { fontSize: 9 }
-                });
+                    
+                    doc.autoTable({
+                        startY: yPosition,
+                        head: headers,
+                        body: data,
+                        theme: 'grid',
+                        headStyles: { fillColor: [40, 167, 69], textColor: 255, fontStyle: 'bold' },
+                        footStyles: { fillColor: [233, 236, 239], textColor: 0, fontStyle: 'bold' },
+                        margin: { left: leftMargin, right: rightMargin },
+                        styles: { fontSize: 9 }
+                    });
+                    
+                    console.log('✅ Crop insight PDF generated with', currentCropInsightData.fullData.length, 'crops');
+                } else {
+                    console.log('⚠️ No crop insight data available');
+                    doc.text('No crop insight data available', leftMargin, yPosition);
+                }
             } else if (chartType === 'soil' && typeof soilChart !== 'undefined' && soilChart) {
                 const soilData = soilChart.data;
                 if (soilData && soilData.labels && soilData.datasets && soilData.datasets[0]) {
@@ -4583,74 +4653,85 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                         styles: { fontSize: 9 }
                     });
                 }
-            } else if (chartType === 'topProducts' && currentTopProductsData) {
-                doc.setFontSize(14);
-                doc.setFont(undefined, 'bold');
-                const period = currentTopProductsData.period === 'weekly' ? 'Weekly' : currentTopProductsData.period === 'yearly' ? 'Yearly' : 'Monthly';
-                const municipality = currentTopProductsData.municipality === 'all' ? 'All Municipalities' : currentTopProductsData.municipality;
-                const limit = currentTopProductsData.limit === 'all' ? 'All Products' : `Top ${currentTopProductsData.limit}`;
-                doc.text(`Top Selling Products (${period}) - ${municipality} - ${limit}`, leftMargin, yPosition);
-                yPosition += 10;
+            } else if (chartType === 'topProducts') {
+                console.log('📄 Processing top products PDF export...');
+                console.log('🏆 currentTopProductsData:', currentTopProductsData);
                 
-                const headers = [['Rank', 'Product Name', 'Category', 'Quantity Sold', 'Revenue (PHP)', 'Orders']];
-                const data = [];
-                let totalQuantity = 0;
-                let totalRevenue = 0;
-                let totalOrders = 0;
-                
-                currentTopProductsData.products.forEach((product, index) => {
-                    const rank = index + 1;
-                    const name = product.productName || 'Unknown';
-                    const category = product.category || 'Unknown';
-                    const sold = product.totalSold || 0;
-                    const revenue = product.totalRevenue || 0;
-                    const orders = product.orderCount || 0;
+                if (currentTopProductsData && currentTopProductsData.products) {
+                    const period = currentTopProductsData.period === 'weekly' ? 'Weekly' : currentTopProductsData.period === 'yearly' ? 'Yearly' : 'Monthly';
+                    const municipality = currentTopProductsData.municipality === 'all' ? 'All Municipalities' : currentTopProductsData.municipality;
+                    const limit = currentTopProductsData.limit === 'all' ? 'All Products' : `Top ${currentTopProductsData.limit}`;
                     
-                    totalQuantity += sold;
-                    totalRevenue += revenue;
-                    totalOrders += orders;
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`Top Selling Products (${period}) - ${municipality} - ${limit}`, leftMargin, yPosition);
+                    yPosition += 10;
                     
-                    const formattedRevenue = new Intl.NumberFormat('en-PH', {
+                    const headers = [['Rank', 'Product Name', 'Category', 'Quantity Sold', 'Revenue (PHP)', 'Orders']];
+                    const data = [];
+                    let totalQuantity = 0;
+                    let totalRevenue = 0;
+                    let totalOrders = 0;
+                    
+                    currentTopProductsData.products.forEach((product, index) => {
+                        const rank = index + 1;
+                        const name = product.productName || product.name || 'Unknown';
+                        const category = product.category || 'Unknown';
+                        const sold = parseInt(product.totalSold) || 0;
+                        const revenue = parseFloat(product.totalRevenue) || 0;
+                        const orders = parseInt(product.orderCount) || 0;
+                        
+                        totalQuantity += sold;
+                        totalRevenue += revenue;
+                        totalOrders += orders;
+                        
+                        const formattedRevenue = new Intl.NumberFormat('en-PH', {
+                            style: 'currency',
+                            currency: 'PHP',
+                            minimumFractionDigits: 2
+                        }).format(revenue);
+                        
+                        data.push([
+                            rank.toString(),
+                            name,
+                            category,
+                            sold.toString(),
+                            formattedRevenue,
+                            orders.toString()
+                        ]);
+                    });
+                    
+                    const formattedTotalRevenue = new Intl.NumberFormat('en-PH', {
                         style: 'currency',
                         currency: 'PHP',
                         minimumFractionDigits: 2
-                    }).format(revenue);
+                    }).format(totalRevenue);
                     
                     data.push([
-                        rank.toString(),
-                        name,
-                        category,
-                        sold.toString(),
-                        formattedRevenue,
-                        orders.toString()
+                        'Total',
+                        '-',
+                        '-',
+                        totalQuantity.toString(),
+                        formattedTotalRevenue,
+                        totalOrders.toString()
                     ]);
-                });
-                
-                const formattedTotalRevenue = new Intl.NumberFormat('en-PH', {
-                    style: 'currency',
-                    currency: 'PHP',
-                    minimumFractionDigits: 2
-                }).format(totalRevenue);
-                
-                data.push([
-                    'Total',
-                    '-',
-                    '-',
-                    totalQuantity.toString(),
-                    formattedTotalRevenue,
-                    totalOrders.toString()
-                ]);
-                
-                doc.autoTable({
-                    startY: yPosition,
-                    head: headers,
-                    body: data,
-                    theme: 'grid',
-                    headStyles: { fillColor: [40, 167, 69], textColor: 255, fontStyle: 'bold' },
-                    footStyles: { fillColor: [233, 236, 239], textColor: 0, fontStyle: 'bold' },
-                    margin: { left: leftMargin, right: rightMargin },
-                    styles: { fontSize: 9 }
-                });
+                    
+                    doc.autoTable({
+                        startY: yPosition,
+                        head: headers,
+                        body: data,
+                        theme: 'grid',
+                        headStyles: { fillColor: [40, 167, 69], textColor: 255, fontStyle: 'bold' },
+                        footStyles: { fillColor: [233, 236, 239], textColor: 0, fontStyle: 'bold' },
+                        margin: { left: leftMargin, right: rightMargin },
+                        styles: { fontSize: 9 }
+                    });
+                    
+                    console.log('✅ Top products PDF generated with', currentTopProductsData.products.length, 'products');
+                } else {
+                    console.log('⚠️ No top products data available');
+                    doc.text('No top products data available', leftMargin, yPosition);
+                }
             }
             
             // Footer
@@ -4669,7 +4750,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             const targetElement = document.querySelector('#' + chartType + 'Chart');
             
             if (targetElement) {
-                html2canvas(targetElement).then(canvas => {
+                html2canvas(targetElement).then(async canvas => {
                     const imgData = canvas.toDataURL('image/png');
                     
                     // Prepare data table HTML based on chart type
@@ -4829,67 +4910,66 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                             console.warn('⚠️ Hectare chart data not available');
                             dataTableHTML = `<p><em>No hectare data available for export.</em></p>`;
                         }
-                    } else if (chartType === 'cropInsight' && currentCropInsightData) {
-                        console.log('🌾 Processing crop insight data...');
+                    } else if (chartType === 'cropInsight') {
+                        console.log('🌾 Processing crop insight data for Word export...');
+                        console.log('🌾 currentCropInsightData:', currentCropInsightData);
                         
-                        const period = currentCropInsightData.period || 'Monthly';
-                        const filter = currentCropInsightData.filter || 'All';
-                        const periodLabel = period.charAt(0).toUpperCase() + period.slice(1);
-                        const filterLabel = filter === 'all' ? 'All Crops' : filter === 'top10' ? 'Top 10 Crops' : 'Overproduced Only';
-                        
-                        dataTableHTML = `
-                            <h2>Crop Insight Data Table</h2>
-                            <p><strong>Period:</strong> ${periodLabel} | <strong>Filter:</strong> ${filterLabel}</p>
-                            <table border="1" style="border-collapse: collapse; width: 100%; margin: 20px 0;">
-                                <thead>
-                                    <tr style="background-color: #f8f9fa;">
-                                        <th style="padding: 10px; text-align: left;">Crop Name</th>
-                                        <th style="padding: 10px; text-align: right;">Harvested (tons)</th>
-                                        <th style="padding: 10px; text-align: right;">Overproduction (tons)</th>
-                                        <th style="padding: 10px; text-align: right;">Total Production (tons)</th>
-                                        <th style="padding: 10px; text-align: right;">Land Cultivated</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        `;
-                        
-                        let totalHarvest = 0;
-                        let totalOverproduction = 0;
-                        let totalProduction = 0;
-                        
-                        currentCropInsightData.labels.forEach((label, index) => {
-                            const harvest = currentCropInsightData.harvest[index] || 0;
-                            const overproduction = currentCropInsightData.overproduction[index] || 0;
-                            const total = harvest + overproduction;
-                            const landCultivated = currentCropInsightData.landCultivated[index] || 0;
-                            const unit = currentCropInsightData.landUnits[index] || 'ha';
+                        if (currentCropInsightData && currentCropInsightData.fullData) {
+                            const periodFilter = document.getElementById('cropInsightPeriodFilter')?.value || 'monthly';
+                            const filter = document.getElementById('cropInsightFilter')?.value || 'all';
+                            const periodLabel = periodFilter === 'weekly' ? 'Weekly' : periodFilter === 'yearly' ? 'Yearly' : 'Monthly';
+                            const filterLabel = filter === 'all' ? 'All Crops' : filter === 'top10' ? 'Top 10 Crops' : 'Overproduced Only';
                             
-                            totalHarvest += harvest;
-                            totalOverproduction += overproduction;
-                            totalProduction += total;
-                            
-                            dataTableHTML += `
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #ddd;">${label}</td>
-                                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${harvest.toFixed(2)}</td>
-                                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${overproduction.toFixed(2)}</td>
-                                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${total.toFixed(2)}</td>
-                                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${landCultivated.toLocaleString()} ${unit}</td>
-                                </tr>
+                            dataTableHTML = `
+                                <h2>Crop Production Analysis</h2>
+                                <p><strong>Period:</strong> ${periodLabel} | <strong>Filter:</strong> ${filterLabel}</p>
+                                <table border="1" style="border-collapse: collapse; width: 100%; margin: 20px 0;">
+                                    <thead>
+                                        <tr style="background-color: #f8f9fa;">
+                                            <th style="padding: 10px; text-align: left;">Crop Name</th>
+                                            <th style="padding: 10px; text-align: right;">Harvested (tons)</th>
+                                            <th style="padding: 10px; text-align: right;">Overproduction (tons)</th>
+                                            <th style="padding: 10px; text-align: right;">Land Cultivated</th>
+                                            <th style="padding: 10px; text-align: center;">Unit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                             `;
-                        });
-                        
-                        dataTableHTML += `
-                                    <tr style="background-color: #e9ecef; font-weight: bold;">
-                                        <td style="padding: 10px; border: 1px solid #ddd;">Total</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${totalHarvest.toFixed(2)}</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${totalOverproduction.toFixed(2)}</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${totalProduction.toFixed(2)}</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">-</td>
+                            
+                            let totalHarvest = 0;
+                            let totalOverproduction = 0;
+                            
+                            currentCropInsightData.fullData.forEach(crop => {
+                                totalHarvest += crop.harvest;
+                                totalOverproduction += crop.overproduction;
+                                
+                                dataTableHTML += `
+                                    <tr>
+                                        <td style="padding: 10px; border: 1px solid #ddd;">${crop.crop}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${crop.harvest.toFixed(2)}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${crop.overproduction.toFixed(2)}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${crop.landCultivated.toFixed(2)}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${crop.landUnit}</td>
                                     </tr>
-                                </tbody>
-                            </table>
-                        `;
+                                `;
+                            });
+                            
+                            const totalProduction = totalHarvest + totalOverproduction;
+                            dataTableHTML += `
+                                        <tr style="background-color: #e9ecef; font-weight: bold;">
+                                            <td style="padding: 10px; border: 1px solid #ddd;">Total</td>
+                                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${totalHarvest.toFixed(2)}</td>
+                                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${totalOverproduction.toFixed(2)}</td>
+                                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;" colspan="2">Total: ${totalProduction.toFixed(2)} tons</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            `;
+                            console.log('✅ Crop insight Word export prepared with', currentCropInsightData.fullData.length, 'crops');
+                        } else {
+                            console.warn('⚠️ No crop data available');
+                            dataTableHTML = `<p><em>No crop data available for export.</em></p>`;
+                        }
                     } else if (chartType === 'stocks') {
                         console.log('📦 Processing stocks data for Word export...');
                         
@@ -5008,81 +5088,88 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                 dataTableHTML = `<p><em>No stocks data available for export.</em></p>`;
                             }
                         }
-                    } else if (chartType === 'topProducts' && currentTopProductsData) {
+                    } else if (chartType === 'topProducts') {
                         console.log('🏆 Processing top products data for Word export...');
+                        console.log('🏆 currentTopProductsData:', currentTopProductsData);
                         
-                        const period = currentTopProductsData.period === 'weekly' ? 'Weekly' : currentTopProductsData.period === 'yearly' ? 'Yearly' : 'Monthly';
-                        const municipality = currentTopProductsData.municipality === 'all' ? 'All Municipalities' : currentTopProductsData.municipality;
-                        const limit = currentTopProductsData.limit === 'all' ? 'All Products' : `Top ${currentTopProductsData.limit}`;
-                        
-                        dataTableHTML = `
-                            <h2>Top Selling Products (${period}) - ${municipality} - ${limit}</h2>
-                            <table border="1" style="border-collapse: collapse; width: 100%; margin: 20px 0;">
-                                <thead>
-                                    <tr style="background-color: #f8f9fa;">
-                                        <th style="padding: 10px; text-align: center;">Rank</th>
-                                        <th style="padding: 10px; text-align: left;">Product Name</th>
-                                        <th style="padding: 10px; text-align: left;">Category</th>
-                                        <th style="padding: 10px; text-align: right;">Quantity Sold</th>
-                                        <th style="padding: 10px; text-align: right;">Revenue (PHP)</th>
-                                        <th style="padding: 10px; text-align: center;">Orders</th>
+                        if (currentTopProductsData && currentTopProductsData.products) {
+                            const period = currentTopProductsData.period === 'weekly' ? 'Weekly' : currentTopProductsData.period === 'yearly' ? 'Yearly' : 'Monthly';
+                            const municipality = currentTopProductsData.municipality === 'all' ? 'All Municipalities' : currentTopProductsData.municipality;
+                            const limit = currentTopProductsData.limit === 'all' ? 'All Products' : `Top ${currentTopProductsData.limit}`;
+                            
+                            dataTableHTML = `
+                                <h2>Top Selling Products (${period}) - ${municipality} - ${limit}</h2>
+                                <table border="1" style="border-collapse: collapse; width: 100%; margin: 20px 0;">
+                                    <thead>
+                                        <tr style="background-color: #f8f9fa;">
+                                            <th style="padding: 10px; text-align: center;">Rank</th>
+                                            <th style="padding: 10px; text-align: left;">Product Name</th>
+                                            <th style="padding: 10px; text-align: left;">Category</th>
+                                            <th style="padding: 10px; text-align: right;">Quantity Sold</th>
+                                            <th style="padding: 10px; text-align: right;">Revenue (PHP)</th>
+                                            <th style="padding: 10px; text-align: center;">Orders</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                            `;
+                            
+                            let totalQuantity = 0;
+                            let totalRevenue = 0;
+                            let totalOrders = 0;
+                            
+                            currentTopProductsData.products.forEach((product, index) => {
+                                const rank = index + 1;
+                                const name = product.productName || 'Unknown';
+                                const category = product.category || 'Unknown';
+                                const sold = product.totalSold || 0;
+                                const revenue = product.totalRevenue || 0;
+                                const orders = product.orderCount || 0;
+                                
+                                totalQuantity += sold;
+                                totalRevenue += revenue;
+                                totalOrders += orders;
+                                
+                                const formattedRevenue = new Intl.NumberFormat('en-PH', {
+                                    style: 'currency',
+                                    currency: 'PHP',
+                                    minimumFractionDigits: 2
+                                }).format(revenue);
+                                
+                                dataTableHTML += `
+                                    <tr>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${rank}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd;">${name}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd;">${category}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${sold}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${formattedRevenue}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${orders}</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                        `;
-                        
-                        let totalQuantity = 0;
-                        let totalRevenue = 0;
-                        let totalOrders = 0;
-                        
-                        currentTopProductsData.products.forEach((product, index) => {
-                            const rank = index + 1;
-                            const name = product.productName || 'Unknown';
-                            const category = product.category || 'Unknown';
-                            const sold = product.totalSold || 0;
-                            const revenue = product.totalRevenue || 0;
-                            const orders = product.orderCount || 0;
+                                `;
+                            });
                             
-                            totalQuantity += sold;
-                            totalRevenue += revenue;
-                            totalOrders += orders;
-                            
-                            const formattedRevenue = new Intl.NumberFormat('en-PH', {
+                            const formattedTotalRevenue = new Intl.NumberFormat('en-PH', {
                                 style: 'currency',
                                 currency: 'PHP',
                                 minimumFractionDigits: 2
-                            }).format(revenue);
+                            }).format(totalRevenue);
                             
                             dataTableHTML += `
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${rank}</td>
-                                    <td style="padding: 10px; border: 1px solid #ddd;">${name}</td>
-                                    <td style="padding: 10px; border: 1px solid #ddd;">${category}</td>
-                                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${sold}</td>
-                                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${formattedRevenue}</td>
-                                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${orders}</td>
-                                </tr>
+                                        <tr style="background-color: #e9ecef; font-weight: bold;">
+                                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">Total</td>
+                                            <td style="padding: 10px; border: 1px solid #ddd;">-</td>
+                                            <td style="padding: 10px; border: 1px solid #ddd;">-</td>
+                                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${totalQuantity}</td>
+                                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${formattedTotalRevenue}</td>
+                                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${totalOrders}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             `;
-                        });
-                        
-                        const formattedTotalRevenue = new Intl.NumberFormat('en-PH', {
-                            style: 'currency',
-                            currency: 'PHP',
-                            minimumFractionDigits: 2
-                        }).format(totalRevenue);
-                        
-                        dataTableHTML += `
-                                    <tr style="background-color: #e9ecef; font-weight: bold;">
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">Total</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd;">-</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd;">-</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${totalQuantity}</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${formattedTotalRevenue}</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${totalOrders}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        `;
+                            console.log('✅ Top products Word export prepared with', currentTopProductsData.products.length, 'products');
+                        } else {
+                            console.warn('⚠️ No top products data available');
+                            dataTableHTML = `<p><em>No top products data available for export.</em></p>`;
+                        }
                     } else {
                         console.warn('⚠️ Chart data not available for:', chartType);
                         dataTableHTML = `<p><em>No data available for ${chartType} chart.</em></p>`;
@@ -5919,6 +6006,188 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             }
         }
 
+        // Comprehensive chart inspection function
+        window.inspectCharts = function() {
+            console.log('🔍 === COMPREHENSIVE CHART INSPECTION ===');
+            
+            // Inspect Crop Insight Chart
+            if (cropInsightChart) {
+                console.log('🌾 CROP INSIGHT CHART:');
+                console.log('  Chart exists:', !!cropInsightChart);
+                console.log('  Chart data:', cropInsightChart.data);
+                console.log('  Labels:', cropInsightChart.data?.labels);
+                console.log('  Datasets:', cropInsightChart.data?.datasets?.map(d => ({
+                    label: d.label,
+                    data: d.data,
+                    dataLength: d.data?.length
+                })));
+                
+                if (cropInsightChart.data?.labels?.length > 0) {
+                    console.log('  Sample data points:');
+                    cropInsightChart.data.labels.slice(0, 3).forEach((label, i) => {
+                        console.log(`    ${label}:`, cropInsightChart.data.datasets.map(d => `${d.label}: ${d.data[i]}`));
+                    });
+                }
+            } else {
+                console.log('🌾 CROP INSIGHT CHART: Not available');
+            }
+            
+            // Inspect Top Products Chart
+            if (topProductsChart) {
+                console.log('🏆 TOP PRODUCTS CHART:');
+                console.log('  Chart exists:', !!topProductsChart);
+                console.log('  Chart data:', topProductsChart.data);
+                console.log('  Labels:', topProductsChart.data?.labels);
+                console.log('  Datasets:', topProductsChart.data?.datasets?.map(d => ({
+                    label: d.label,
+                    data: d.data,
+                    dataLength: d.data?.length
+                })));
+                
+                if (topProductsChart.data?.labels?.length > 0) {
+                    console.log('  Sample data points:');
+                    topProductsChart.data.labels.slice(0, 3).forEach((label, i) => {
+                        console.log(`    ${label}:`, topProductsChart.data.datasets.map(d => `${d.label}: ${d.data[i]}`));
+                    });
+                }
+            } else {
+                console.log('🏆 TOP PRODUCTS CHART: Not available');
+            }
+            
+            // Inspect stored data
+            console.log('📁 STORED DATA:');
+            console.log('  currentCropInsightData:', !!currentCropInsightData);
+            if (currentCropInsightData) {
+                console.log('    fullData count:', currentCropInsightData.fullData?.length || 0);
+                console.log('    sample:', currentCropInsightData.fullData?.slice(0, 2));
+            }
+            console.log('  currentTopProductsData:', !!currentTopProductsData);
+            if (currentTopProductsData) {
+                console.log('    products count:', currentTopProductsData.products?.length || 0);
+                console.log('    sample:', currentTopProductsData.products?.slice(0, 2));
+            }
+            
+            console.log('🔍 === END INSPECTION ===');
+        };
+
+        // Direct chart export test
+        window.testDirectChartExport = function() {
+            console.log('🚀 === DIRECT CHART EXPORT TEST ===');
+            
+            // Inspect what we have
+            inspectCharts();
+            
+            // Try to export crop insight directly from chart
+            if (cropInsightChart?.data?.labels?.length > 0) {
+                console.log('🌾 Attempting crop insight export...');
+                exportChart('cropInsight', 'csv');
+            } else {
+                console.log('❌ No crop insight chart data available');
+            }
+            
+            // Try to export top products directly from chart  
+            if (topProductsChart?.data?.labels?.length > 0) {
+                console.log('🏆 Attempting top products export...');
+                exportChart('topProducts', 'csv');
+            } else {
+                console.log('❌ No top products chart data available');
+            }
+            
+            console.log('🚀 === END TEST ===');
+        };
+
+        // Test export function that guarantees data
+        window.forceExportWithData = function() {
+            console.log('🚀 === FORCE EXPORT TEST ===');
+            
+            // Force set sample data
+            currentCropInsightData = {
+                fullData: [
+                    { crop: 'Rice', harvest: 125.5, overproduction: 25.5, landCultivated: 150, landUnit: 'ha' },
+                    { crop: 'Corn', harvest: 95.3, overproduction: 18.3, landCultivated: 80, landUnit: 'ha' },
+                    { crop: 'Tomato', harvest: 68.8, overproduction: 12.8, landCultivated: 45, landUnit: 'ha' },
+                    { crop: 'Cabbage', harvest: 52.2, overproduction: 8.2, landCultivated: 65, landUnit: 'ha' }
+                ],
+                period: 'monthly',
+                filter: 'all'
+            };
+            
+            currentTopProductsData = {
+                products: [
+                    { productName: 'Rice Premium', category: 'Grains', totalSold: 150, totalRevenue: 7500, orderCount: 25 },
+                    { productName: 'Fresh Tomatoes', category: 'Vegetables', totalSold: 120, totalRevenue: 3600, orderCount: 18 },
+                    { productName: 'Organic Lettuce', category: 'Vegetables', totalSold: 90, totalRevenue: 2700, orderCount: 15 },
+                    { productName: 'Sweet Corn', category: 'Vegetables', totalSold: 75, totalRevenue: 2250, orderCount: 12 }
+                ],
+                period: 'monthly',
+                municipality: 'all',
+                limit: '10'
+            };
+            
+            console.log('✅ Sample data set. Now try the exports:');
+            console.log('📊 Crop insight data ready:', currentCropInsightData.fullData.length, 'crops');
+            console.log('📊 Top products data ready:', currentTopProductsData.products.length, 'products');
+            console.log('🚀 === END TEST ===');
+        };
+
+        // Test export function
+        window.testCropExport = async function() {
+            console.log('🧪 === MANUAL EXPORT TEST ===');
+            console.log('🌾 Before refresh - Current data:', !!currentCropInsightData);
+            
+            // Force refresh first
+            await updateCropInsightChart();
+            
+            console.log('🌾 After refresh - Current data:', !!currentCropInsightData);
+            if (currentCropInsightData) {
+                console.log('🌾 FullData:', currentCropInsightData.fullData?.length || 0);
+                console.log('🌾 Sample data:', currentCropInsightData.fullData?.slice(0, 2));
+            }
+            
+            // Try export
+            await exportChart('cropInsight', 'csv');
+            console.log('🧪 === END TEST ===');
+        };
+
+        // Debug function to check data status
+        window.debugDataStatus = function() {
+            console.log('🔍 === DEBUG DATA STATUS ===');
+            console.log('🌾 Crop Insight Data:', {
+                exists: !!currentCropInsightData,
+                hasFullData: !!(currentCropInsightData?.fullData),
+                fullDataLength: currentCropInsightData?.fullData?.length || 0,
+                sampleFullData: currentCropInsightData?.fullData?.slice(0, 2),
+                labels: currentCropInsightData?.labels?.length || 0,
+                harvest: currentCropInsightData?.harvest?.length || 0,
+                period: currentCropInsightData?.period,
+                filter: currentCropInsightData?.filter
+            });
+            console.log('🏆 Top Products Data:', {
+                exists: !!currentTopProductsData,
+                hasProducts: !!(currentTopProductsData?.products),
+                productsLength: currentTopProductsData?.products?.length || 0,
+                sampleProducts: currentTopProductsData?.products?.slice(0, 2),
+                period: currentTopProductsData?.period,
+                municipality: currentTopProductsData?.municipality
+            });
+            console.log('📊 Charts:', {
+                cropInsightChart: !!cropInsightChart,
+                topProductsChart: !!topProductsChart
+            });
+            
+            // Force refresh data
+            console.log('🔄 Forcing data refresh...');
+            updateCropInsightChart().then(() => {
+                console.log('🌾 Crop insight refreshed:', !!currentCropInsightData);
+                console.log('🌾 Full data after refresh:', currentCropInsightData?.fullData?.slice(0, 2));
+            });
+            updateTopProductsChart().then(() => {
+                console.log('🏆 Top products refreshed:', !!currentTopProductsData);
+                console.log('🏆 Products after refresh:', currentTopProductsData?.products?.slice(0, 2));
+            });
+            console.log('🔍 === END DEBUG ===');
+        };
+
         // Initialize Charts
         async function initializeCharts() {
             initSalesChart();
@@ -5926,6 +6195,20 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             initSoilChart();
             initHectareChart();
             initCropInsightChart();
+            
+            // Initialize data-dependent charts
+            try {
+                await updateTopProductsChart();
+            } catch (error) {
+                console.error('Exception updating top products chart:', error);
+            }
+            
+            try {
+                await updateCropInsightChart();
+            } catch (error) {
+                console.error('Exception updating crop insight chart:', error);
+            }
+            
             try {
                 await updateStockAnalyticsFromDB();
             } catch (error) {
@@ -6783,6 +7066,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             window.location.href = 'index.html';
         }
 
+        /* OLD DUPLICATE EXPORT FUNCTIONS - COMMENTED OUT TO USE UPDATED VERSIONS ABOVE
         function exportChart(chartType, format) {
             const chartMap = {
                 'sales': salesChart,
@@ -7066,8 +7350,10 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             
             doc.save(filename + '.pdf');
         }
+        END OF OLD DUPLICATE EXPORT FUNCTIONS */
 
-        function exportToWord(chartType, filename) {
+        // OLD exportToWord function removed - duplicate was overriding updated function above
+        /* function exportToWord(chartType, filename) {
             console.log('📝 Exporting to Word:', chartType);
             const canvas = document.querySelector('#' + chartType + 'Chart');
             if (canvas) {
@@ -7398,7 +7684,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     window.URL.revokeObjectURL(url);
                 });
             }
-        }
+        } */
 
     </script>
 </body>

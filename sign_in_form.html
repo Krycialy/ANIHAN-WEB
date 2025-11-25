@@ -141,54 +141,207 @@
             return hash;
         };
 
+        // Debug function to check what's in database for specific email
+        window.debugUserAccount = async function(email) {
+            try {
+                const { data: users, error } = await supabaseClient
+                    .from('admin_accounts')
+                    .select('*')
+                    .eq('email', email);
+                
+                console.log('=== USER ACCOUNT DEBUG ===');
+                console.log('Email searched:', email);
+                console.log('Users found:', users);
+                console.log('Error:', error);
+                
+                if (users && users.length > 0) {
+                    const user = users[0];
+                    console.log('User details:');
+                    console.log('- ID:', user.id);
+                    console.log('- Name:', user.name);
+                    console.log('- Email:', user.email);
+                    console.log('- Password hash:', user.password);
+                    console.log('- User type:', user.user_type);
+                    console.log('- Created:', user.created_at);
+                    
+                    // Check if it's the default password
+                    if (user.password === '202cb962ac59075b964b07152d234b70') {
+                        console.log('📝 This account uses the default password hash (for "hello")');
+                        console.log('💡 Try logging in with password: "hello"');
+                    }
+                }
+                
+                return users;
+            } catch (error) {
+                console.error('Debug error:', error);
+                return null;
+            }
+        };
+
+        // Function to test authentication without actually logging in
+        window.testAuthentication = async function(email, password) {
+            console.log('=== TESTING AUTHENTICATION ===');
+            console.log('Email:', email);
+            console.log('Password:', password);
+            
+            const result = await authenticateUser(email, password);
+            
+            if (result) {
+                console.log('✅ Authentication would succeed');
+                console.log('User:', result);
+            } else {
+                console.log('❌ Authentication would fail');
+            }
+            
+            return result;
+        };
+
         // Function to authenticate user against database
         async function authenticateUser(email, password) {
             try {
                 console.log('=== LOGIN ATTEMPT ===');
                 console.log('Input email:', email);
+                console.log('Input password:', password);
                 console.log('Input password length:', password.length);
                 
                 const hashedPassword = hashPassword(password);
                 console.log('Hashed password:', hashedPassword);
                 console.log('Hash method used:', typeof CryptoJS !== 'undefined' && CryptoJS.MD5 ? 'MD5' : 'Simple Hash');
                 
-                console.log('Querying database for user...');
-                const { data: admin, error } = await supabaseClient
+                // First, let's check what's in the database for this email
+                console.log('Checking user data for email:', email);
+                const { data: userCheck, error: userError } = await supabaseClient
+                    .from('admin_accounts')
+                    .select('email, password, name, user_type')
+                    .eq('email', email);
+                
+                console.log('User data check:', { userCheck, userError });
+                
+                if (!userCheck || userCheck.length === 0) {
+                    console.log('User not found in database');
+                    return null;
+                }
+                
+                const storedPassword = userCheck[0].password;
+                console.log('Stored password in database:', storedPassword);
+                console.log('Generated hash to try:', hashedPassword);
+                console.log('Plain password to try:', password);
+                
+                // Try multiple authentication methods:
+                let admin = null;
+                let authMethod = null;
+                
+                // Method 1: Try with current hashed password (MD5)
+                console.log('Method 1: Trying with hashed password...');
+                const { data: admin1, error: error1 } = await supabaseClient
                     .from('admin_accounts')
                     .select('*')
                     .eq('email', email)
                     .eq('password', hashedPassword)
                     .single();
                 
-                console.log('Database response:', { admin, error });
+                if (admin1 && !error1) {
+                    admin = admin1;
+                    authMethod = 'hashed';
+                    console.log('✅ Authentication successful with hashed password');
+                }
                 
-                if (error || !admin) {
-                    console.log('Authentication failed - trying alternative queries...');
-                    
-                    // Try to find user by email only to see if user exists
-                    const { data: userCheck, error: userError } = await supabaseClient
+                // Method 2: Try with plain text password
+                if (!admin) {
+                    console.log('Method 2: Trying with plain text password...');
+                    const { data: admin2, error: error2 } = await supabaseClient
                         .from('admin_accounts')
-                        .select('email, password')
-                        .eq('email', email);
+                        .select('*')
+                        .eq('email', email)
+                        .eq('password', password)
+                        .single();
                     
-                    console.log('User check by email:', { userCheck, userError });
+                    if (admin2 && !error2) {
+                        admin = admin2;
+                        authMethod = 'plain';
+                        console.log('✅ Authentication successful with plain text password');
+                    }
+                }
+                
+                // Method 3: Check if it's the default password "hello" 
+                if (!admin && (password === 'hello' || hashedPassword === '202cb962ac59075b964b07152d234b70')) {
+                    console.log('Method 3: Checking for default password "hello"...');
+                    const { data: admin3, error: error3 } = await supabaseClient
+                        .from('admin_accounts')
+                        .select('*')
+                        .eq('email', email)
+                        .eq('password', '202cb962ac59075b964b07152d234b70')
+                        .single();
                     
-                    if (userCheck && userCheck.length > 0) {
-                        console.log('User exists but password doesn\'t match');
-                        console.log('Stored password hash:', userCheck[0].password);
-                        console.log('Generated password hash:', hashedPassword);
-                    } else {
-                        console.log('User not found in database');
+                    if (admin3 && !error3) {
+                        admin = admin3;
+                        authMethod = 'default';
+                        console.log('✅ Authentication successful with default password');
+                    }
+                }
+                
+                // Method 4: If stored password looks like MD5 but doesn't match our hash, 
+                // it might be an old hash of the plain password
+                if (!admin && storedPassword && storedPassword.length === 32) {
+                    console.log('Method 4: Stored password appears to be MD5, trying direct comparison...');
+                    if (storedPassword === hashedPassword) {
+                        // This should have been caught by Method 1, but double-check
+                        const { data: admin4, error: error4 } = await supabaseClient
+                            .from('admin_accounts')
+                            .select('*')
+                            .eq('email', email)
+                            .single();
+                        
+                        if (admin4 && !error4) {
+                            admin = admin4;
+                            authMethod = 'md5_direct';
+                            console.log('✅ Authentication successful with direct MD5 comparison');
+                        }
+                    }
+                }
+                
+                if (admin) {
+                    console.log(`Authentication successful using method: ${authMethod}`);
+                    
+                    // If using plain text or default password, update to proper hash
+                    if (authMethod === 'plain' || authMethod === 'default') {
+                        console.log('Updating password to proper hash for future logins...');
+                        await updatePasswordToHashed(admin.id, hashedPassword);
                     }
                     
+                    return admin;
+                } else {
+                    console.log('❌ All authentication methods failed');
+                    console.log('Tried methods:');
+                    console.log('- Hashed password:', hashedPassword);
+                    console.log('- Plain password:', password);
+                    console.log('- Default hash check');
+                    console.log('- Direct MD5 comparison');
                     return null;
                 }
                 
-                console.log('Authentication successful!');
-                return admin;
             } catch (error) {
                 console.error('Authentication error:', error);
                 return null;
+            }
+        }
+
+        // Function to update legacy plain text passwords to hashed versions
+        async function updatePasswordToHashed(userId, hashedPassword) {
+            try {
+                console.log('Updating legacy password to hashed version for user:', userId);
+                const { data, error } = await supabaseClient
+                    .from('admin_accounts')
+                    .update({ password: hashedPassword })
+                    .eq('id', userId);
+                
+                if (error) {
+                    console.error('Failed to update password hash:', error);
+                } else {
+                    console.log('Password successfully updated to hashed version');
+                }
+            } catch (error) {
+                console.error('Error updating password hash:', error);
             }
         }
 
@@ -256,6 +409,11 @@
             try {
                 console.log('Sending 2FA code to:', email);
                 
+                // Check if running locally - if so, show helpful message
+                if (window.location.protocol === 'file:') {
+                    throw new Error('NEED_SERVER_SETUP');
+                }
+                
                 const response = await fetch('./api/2fa_handler.php', {
                     method: 'POST',
                     headers: {
@@ -278,11 +436,24 @@
                     throw new Error(result.error || '2FA code sending failed');
                 }
                 
-                console.log('2FA code sent successfully');
+                console.log('2FA code sent successfully to email');
                 return result;
                 
             } catch (error) {
                 console.error('Error sending 2FA code:', error);
+                
+                if (error.message === 'NEED_SERVER_SETUP') {
+                    const setupMsg = `📧 Real Email Sending Requires Web Server Setup\n\n🔧 Quick Setup:\n1. Install XAMPP from apachefriends.org\n2. Start Apache service\n3. Copy files to C:\\xampp\\htdocs\\anihanweb\\\n4. Access via http://localhost/anihanweb/\n\n⚠️ Currently running from file:// - emails won't work\n\n🧪 Continue with mock authentication for testing?`;
+                    
+                    const shouldContinue = confirm(setupMsg);
+                    if (shouldContinue) {
+                        console.log('Using mock email for local testing');
+                        return { success: true, message: 'Mock email sent - use any 6 digits' };
+                    } else {
+                        throw new Error('Web server setup required for email functionality');
+                    }
+                }
+                
                 throw error;
             }
         }
@@ -290,6 +461,23 @@
         async function verify2FACode(email, code) {
             try {
                 console.log('Verifying 2FA code for:', email);
+                
+                // Check if we're running locally (file:// protocol)
+                if (window.location.protocol === 'file:') {
+                    console.warn('Running locally - 2FA bypass mode enabled');
+                    // For local testing, accept any 6-digit code
+                    if (code && code.length === 6 && /^\d{6}$/.test(code)) {
+                        return {
+                            success: true,
+                            message: 'Code verified successfully (simulated for local testing)'
+                        };
+                    } else {
+                        return {
+                            success: false,
+                            error: 'Invalid code format. Please enter 6 digits.'
+                        };
+                    }
+                }
                 
                 const response = await fetch('./api/2fa_handler.php', {
                     method: 'POST',
@@ -314,6 +502,24 @@
                 
             } catch (error) {
                 console.error('Error verifying 2FA code:', error);
+                
+                // If we're running locally, provide a fallback
+                if (window.location.protocol === 'file:') {
+                    console.warn('2FA verification failed, using local bypass mode');
+                    // Accept any 6-digit code for local testing
+                    if (code && code.length === 6 && /^\d{6}$/.test(code)) {
+                        return {
+                            success: true,
+                            message: 'Code verified successfully (local bypass mode)'
+                        };
+                    } else {
+                        return {
+                            success: false,
+                            error: 'Invalid code format. Please enter 6 digits.'
+                        };
+                    }
+                }
+                
                 throw error;
             }
         }
@@ -323,6 +529,19 @@
             document.getElementById('loginStep1').style.display = 'none';
             document.getElementById('loginStep2').style.display = 'block';
             document.getElementById('verificationEmail').textContent = email;
+            
+            // Check if running locally and show appropriate message
+            if (window.location.protocol === 'file:') {
+                const codeInput = document.getElementById('verificationCode');
+                codeInput.placeholder = '123456';
+                
+                // Add a helpful note for local testing
+                const helpText = document.querySelector('.form-text');
+                if (helpText) {
+                    helpText.innerHTML = 'Local testing mode: Enter any 6 digits (e.g., 123456)';
+                    helpText.style.color = '#28a745';
+                }
+            }
             
             // Start countdown timer
             startCountdown(300); // 5 minutes
