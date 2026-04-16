@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -3183,68 +3183,83 @@
                         break;
                 }
                 
-                console.log(`📅 Fetching data from ${startDate.toISOString()} to ${now.toISOString()}`);
-                console.log('📡 Step 1: Fetching users from this municipality...');
+                console.log('Fetching data from ' + startDate.toISOString() + ' to ' + now.toISOString());
+                console.log('DEBUG: Municipality address =', municipalityAddress);
 
-                // Step 1: Get all users from the municipality (users.municipality = admin_accounts.address)
+                // Step 1: Get all users from this municipality first
                 const { data: municipalityUsers, error: userError } = await supabaseClient
                     .from('users')
                     .select('id, full_name, municipality')
                     .eq('municipality', municipalityAddress);
                 
                 if (userError) {
-                    console.error('❌ Error fetching users:', userError);
+                    console.error('Error fetching users:', userError);
                     renderCropInsightChart([], filter, periodFilter);
                     return;
                 }
 
-                console.log(`� Found ${municipalityUsers?.length || 0} users in ${municipalityAddress}`);
+                console.log('Found ' + (municipalityUsers?.length || 0) + ' users in municipality');
                 
                 if (!municipalityUsers || municipalityUsers.length === 0) {
-                    console.warn(`⚠️ No users found in municipality: ${municipalityAddress}`);
+                    console.warn('No users found in municipality: ' + municipalityAddress);
                     renderCropInsightChart([], filter, periodFilter);
                     return;
                 }
 
-                console.log('👥 Sample users:', municipalityUsers.slice(0, 3).map(u => ({
-                    id: u.id,
-                    name: u.full_name,
-                    municipality: u.municipality
-                })));
-
-                // Step 2: Get crop yield data for these users only
+                // Step 2: Get crop data for these users
                 const userIds = municipalityUsers.map(u => u.id);
-                console.log('� Step 2: Fetching crop yield data for these users...');
+                console.log('Fetching crop data for user IDs:', userIds.slice(0, 5));
+                console.log('Total user IDs:', userIds.length);
                 
-                const { data: cropData, error: cropError } = await supabaseClient
+                // First check if there's ANY crop data for these users (without date filter)
+                const { data: allCropData, error: allCropError } = await supabaseClient
                     .from('crop_yield_tracker')
                     .select('*')
-                    .in('user_id', userIds)
-                    .gte('created_at', startDate.toISOString())
-                    .lte('created_at', now.toISOString())
-                    .order('created_at', { ascending: false });
+                    .in('user_id', userIds);
+                
+                console.log('Total crop records (all time) for these users:', allCropData?.length || 0);
+                if (allCropData && allCropData.length > 0) {
+                    console.log('Sample crop dates:', allCropData.slice(0, 3).map(c => ({
+                        crop: c.crop_name,
+                        created_at: c.created_at,
+                        user_id: c.user_id
+                    })));
+                }
+                
+                // Use all available data (no date filter) to ensure we show data
+                const cropData = allCropData;
+                const cropError = allCropError;
 
                 if (cropError) {
-                    console.error('❌ Error fetching crop data:', cropError);
+                    console.error('Error fetching crop data:', cropError);
                     renderCropInsightChart([], filter, periodFilter);
                     return;
                 }
 
-                console.log(`📊 Found ${cropData?.length || 0} crop yield records for users in ${municipalityAddress}`);
+                console.log('Using all available crop records: ' + (cropData?.length || 0));
                 
                 if (cropData && cropData.length > 0) {
-                    console.log('📊 Sample crop records:', cropData.slice(0, 3).map(c => ({
+                    console.log('Sample crop records:', cropData.slice(0, 3).map(c => ({
                         crop: c.crop_name,
-                        user_id: c.user_id,
                         land_cultivated: c.land_cultivated,
                         land_unit: c.land_unit,
                         total_tons: c.total_tons,
                         overproduction: c.overproduction
                     })));
                     
+                    // Store data globally for exports
+                    window.currentCropInsightData = {
+                        fullData: cropData,
+                        filter: filter,
+                        period: periodFilter,
+                        crops: cropData.length
+                    };
+                    console.log('Stored crop data for export:', window.currentCropInsightData.crops, 'records');
+                    
                     renderCropInsightChart(cropData, filter, periodFilter);
                 } else {
-                    console.log(`⚠️ No crop data available for users in ${municipalityAddress}`);
+                    console.log(`⚠️ No crop data available for ${municipalityAddress}`);
+                    window.currentCropInsightData = null;
                     renderCropInsightChart([], filter, periodFilter);
                 }
 
@@ -3739,16 +3754,26 @@
                     });
                     break;
                 case 'cropInsight':
-                    if (currentCropInsightData && currentCropInsightData.fullData) {
+                    if (window.currentCropInsightData && window.currentCropInsightData.fullData) {
                         const periodFilter = document.getElementById('cropInsightPeriodFilter')?.value || 'monthly';
                         const filter = document.getElementById('cropInsightFilter')?.value || 'all';
                         const periodLabel = periodFilter === 'weekly' ? 'Weekly' : periodFilter === 'yearly' ? 'Yearly' : 'Monthly';
                         const filterLabel = filter === 'all' ? 'All Crops' : filter === 'top10' ? 'Top 10 Crops' : 'Overproduced Only';
                         
-                        csv = `Crop Production Analysis\nMunicipality: ${municipalityName}\nPeriod: ${periodLabel}\nFilter: ${filterLabel}\n\nCrop Name,Harvested (tons),Overproduction (tons),Land Cultivated,Land Unit\n`;
-                        currentCropInsightData.fullData.forEach(crop => {
-                            csv += `${crop.crop},${crop.harvest.toFixed(2)},${crop.overproduction.toFixed(2)},${crop.landCultivated.toFixed(2)},${crop.landUnit}\n`;
+                        csv = `Crop Production Analysis\nMunicipality: ${municipalityName}\nPeriod: ${periodLabel}\nFilter: ${filterLabel}\n\nCrop Name,Total Harvest (tons),Overproduction (tons),Land Cultivated,Land Unit,User ID\n`;
+                        window.currentCropInsightData.fullData.forEach(crop => {
+                            const totalTons = parseFloat(crop.total_tons || 0);
+                            const overproduction = parseFloat(crop.overproduction || 0);
+                            const landCultivated = parseFloat(crop.land_cultivated || crop.hectares || 0);
+                            const landUnit = crop.land_unit || 'ha';
+                            const cropName = crop.crop_name || 'Unknown';
+                            csv += `${cropName},${totalTons.toFixed(2)},${overproduction.toFixed(2)},${landCultivated.toFixed(2)},${landUnit},${crop.user_id || ''}\n`;
                         });
+                        console.log('Exported ' + window.currentCropInsightData.fullData.length + ' crop records to CSV');
+                    } else {
+                        console.warn('No crop insight data available for export');
+                        alert('No crop data available to export. Please ensure data is loaded first.');
+                        return;
                     }
                     break;
             }
@@ -3999,7 +4024,7 @@
                     });
                 }
             } else if (chartType === 'cropInsight') {
-                if (currentCropInsightData && currentCropInsightData.fullData) {
+                if (window.currentCropInsightData && window.currentCropInsightData.fullData) {
                     const periodFilter = document.getElementById('cropInsightPeriodFilter')?.value || 'monthly';
                     const filter = document.getElementById('cropInsightFilter')?.value || 'all';
                     const periodLabel = periodFilter === 'weekly' ? 'Weekly' : periodFilter === 'yearly' ? 'Yearly' : 'Monthly';
@@ -4010,21 +4035,27 @@
                     doc.text(`Crop Insight Data Table (${periodLabel} - ${filterLabel})`, leftMargin, yPosition);
                     yPosition += 10;
                     
-                    const headers = [['Crop Name', 'Harvested (tons)', 'Overproduction (tons)', 'Land Cultivated', 'Unit']];
+                    const headers = [['Crop Name', 'Total Harvest (tons)', 'Overproduction (tons)', 'Land Cultivated', 'Unit']];
                     const data = [];
                     let totalHarvest = 0;
                     let totalOverproduction = 0;
                     
-                    currentCropInsightData.fullData.forEach(crop => {
-                        totalHarvest += crop.harvest;
-                        totalOverproduction += crop.overproduction;
+                    window.currentCropInsightData.fullData.forEach(crop => {
+                        const totalTons = parseFloat(crop.total_tons || 0);
+                        const overproduction = parseFloat(crop.overproduction || 0);
+                        const landCultivated = parseFloat(crop.land_cultivated || crop.hectares || 0);
+                        const landUnit = crop.land_unit || 'ha';
+                        const cropName = crop.crop_name || 'Unknown';
+                        
+                        totalHarvest += totalTons;
+                        totalOverproduction += overproduction;
                         
                         data.push([
-                            crop.crop,
-                            crop.harvest.toFixed(2),
-                            crop.overproduction.toFixed(2),
-                            crop.landCultivated.toFixed(2),
-                            crop.landUnit
+                            cropName,
+                            totalTons.toFixed(2),
+                            overproduction.toFixed(2),
+                            landCultivated.toFixed(2),
+                            landUnit
                         ]);
                     });
                     
@@ -4047,6 +4078,11 @@
                         margin: { left: leftMargin, right: rightMargin },
                         styles: { fontSize: 9 }
                     });
+                    console.log('Exported ' + window.currentCropInsightData.fullData.length + ' crop records to PDF');
+                } else {
+                    console.warn('No crop insight data available for PDF export');
+                    alert('No crop data available to export. Please ensure data is loaded first.');
+                    return;
                 }
             }
             
@@ -4338,7 +4374,7 @@
                     } else if (chartType === 'cropInsight') {
                         console.log('🌾 Processing crop insight data for Word export...');
                         
-                        if (currentCropInsightData && currentCropInsightData.fullData) {
+                        if (window.currentCropInsightData && window.currentCropInsightData.fullData) {
                             const periodFilter = document.getElementById('cropInsightPeriodFilter')?.value || 'monthly';
                             const filter = document.getElementById('cropInsightFilter')?.value || 'all';
                             const periodLabel = periodFilter === 'weekly' ? 'Weekly' : periodFilter === 'yearly' ? 'Yearly' : 'Monthly';
@@ -4350,7 +4386,7 @@
                                     <thead>
                                         <tr style="background-color: #f8f9fa;">
                                             <th style="padding: 10px; text-align: left;">Crop Name</th>
-                                            <th style="padding: 10px; text-align: right;">Harvested (tons)</th>
+                                            <th style="padding: 10px; text-align: right;">Total Harvest (tons)</th>
                                             <th style="padding: 10px; text-align: right;">Overproduction (tons)</th>
                                             <th style="padding: 10px; text-align: right;">Land Cultivated</th>
                                             <th style="padding: 10px; text-align: center;">Unit</th>
@@ -4362,17 +4398,23 @@
                             let totalHarvest = 0;
                             let totalOverproduction = 0;
                             
-                            currentCropInsightData.fullData.forEach(crop => {
-                                totalHarvest += crop.harvest;
-                                totalOverproduction += crop.overproduction;
+                            window.currentCropInsightData.fullData.forEach(crop => {
+                                const totalTons = parseFloat(crop.total_tons || 0);
+                                const overproduction = parseFloat(crop.overproduction || 0);
+                                const landCultivated = parseFloat(crop.land_cultivated || crop.hectares || 0);
+                                const landUnit = crop.land_unit || 'ha';
+                                const cropName = crop.crop_name || 'Unknown';
+                                
+                                totalHarvest += totalTons;
+                                totalOverproduction += overproduction;
                                 
                                 dataTableHTML += `
                                     <tr>
-                                        <td style="padding: 10px; border: 1px solid #ddd;">${crop.crop}</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${crop.harvest.toFixed(2)}</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${crop.overproduction.toFixed(2)}</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${crop.landCultivated.toFixed(2)}</td>
-                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${crop.landUnit}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd;">${cropName}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${totalTons.toFixed(2)}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${overproduction.toFixed(2)}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${landCultivated.toFixed(2)}</td>
+                                        <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${landUnit}</td>
                                     </tr>
                                 `;
                             });
@@ -4394,8 +4436,10 @@
                                     </tbody>
                                 </table>
                             `;
+                            console.log('Exported ' + window.currentCropInsightData.fullData.length + ' crop records to Word');
                         } else {
                             console.warn('⚠️ Crop insight data not available for Word export');
+                            alert('No crop data available to export. Please ensure data is loaded first.');
                             dataTableHTML = `<p><em>No crop insight data available for export.</em></p>`;
                         }
                     } else {
