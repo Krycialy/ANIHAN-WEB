@@ -1,7 +1,7 @@
-
+﻿
 // Supabase configuration
-const SUPABASE_URL = 'https://ontuivohwjfkxjwrjnot.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9udHVpdm9od2pma3hqd3Jqbm90Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2Njg3MTAsImV4cCI6MjA3MDI0NDcxMH0.jGQhshEtfnABK8xNF98WxB10c66vIkTzAoLrhxbeQwE'
+const SUPABASE_URL = 'https://uaiiwhvulplvzfvtlegt.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhaWl3aHZ1bHBsdnpmdnRsZWd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjU5MjgsImV4cCI6MjA5MTkwMTkyOH0.AEV4LF_6n6Lf4O9dzcjUgi2lMVA_6pIFN0BZnz4P33k'
 
 // Initialize Supabase client globally
 let supabaseClient;
@@ -9,7 +9,7 @@ try {
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     // Make it available globally
     window.supabaseClient = supabaseClient;
-    console.log('✅ Supabase client initialized and made globally available');
+    console.log('âœ… Supabase client initialized and made globally available');
 } catch (error) {
     console.error('Failed to initialize Supabase client:', error);
 }
@@ -199,9 +199,9 @@ function updateProfileDisplay(userData) {
     if (profileName) {
         const displayName = userData.name || 'Administrator';
         profileName.textContent = displayName;
-        console.log('✅ Updated profile name to:', displayName);
+        console.log('âœ… Updated profile name to:', displayName);
     } else {
-        console.log('❌ Profile name element not found');
+        console.log('âŒ Profile name element not found');
     }
     
     // Update profile email
@@ -209,9 +209,9 @@ function updateProfileDisplay(userData) {
     if (profileEmail) {
         const displayEmail = userData.email || 'admin@anihan.gov.ph';
         profileEmail.textContent = displayEmail;
-        console.log('✅ Updated profile email to:', displayEmail);
+        console.log('âœ… Updated profile email to:', displayEmail);
     } else {
-        console.log('❌ Profile email element not found');
+        console.log('âŒ Profile email element not found');
     }
     
     // Update profile role
@@ -219,9 +219,9 @@ function updateProfileDisplay(userData) {
     if (profileRole) {
         const displayRole = userData.user_type || userData.userType || 'ADMIN';
         profileRole.textContent = displayRole;
-        console.log('✅ Updated profile role to:', displayRole);
+        console.log('âœ… Updated profile role to:', displayRole);
     } else {
-        console.log('❌ Profile role element not found');
+        console.log('âŒ Profile role element not found');
     }
 
     // Update profile access/location
@@ -241,9 +241,9 @@ function updateProfileDisplay(userData) {
         }
         
         profileAccess.textContent = locationText;
-        console.log('✅ Updated profile location to:', locationText);
+        console.log('âœ… Updated profile location to:', locationText);
     } else {
-        console.log('❌ Profile access element not found');
+        console.log('âŒ Profile access element not found');
     }
     
     // Update profile title based on role
@@ -264,7 +264,7 @@ function updateProfileDisplay(userData) {
     console.log('=== PROCESSING PROFILE IMAGE ===');
     
     if (userData.image_url && userData.image_url.trim() !== '' && userData.image_url !== 'null') {
-        console.log('✅ Profile image found - processing...');
+        console.log('âœ… Profile image found - processing...');
         
         // Clean up the image URL
         let cleanImageUrl = userData.image_url.trim();
@@ -285,13 +285,13 @@ function updateProfileDisplay(userData) {
             userAvatarIcon.style.display = 'none';
             
             userAvatarImage.onerror = function() {
-                console.error('❌ Main avatar image failed to load');
+                console.error('âŒ Main avatar image failed to load');
                 this.style.display = 'none';
                 userAvatarIcon.style.display = 'block';
             };
             
             userAvatarImage.onload = function() {
-                console.log('✅ Main avatar image loaded successfully');
+                console.log('âœ… Main avatar image loaded successfully');
             };
         }
         
@@ -302,18 +302,18 @@ function updateProfileDisplay(userData) {
             profileAvatarIcon.style.display = 'none';
             
             profileAvatarImage.onerror = function() {
-                console.error('❌ Dropdown avatar image failed to load');
+                console.error('âŒ Dropdown avatar image failed to load');
                 this.style.display = 'none';
                 profileAvatarIcon.style.display = 'block';
             };
             
             profileAvatarImage.onload = function() {
-                console.log('✅ Dropdown avatar image loaded successfully');
+                console.log('âœ… Dropdown avatar image loaded successfully');
             };
         }
         
     } else {
-        console.log('❌ No profile image found - showing default icons');
+        console.log('âŒ No profile image found - showing default icons');
         
         // Get image elements
         const userAvatarImage = document.getElementById('userAvatarImage');
@@ -429,7 +429,7 @@ async function refreshProfileFromDatabase() {
             // Update profile display
             updateProfileDisplay(userData);
             
-            console.log('✅ Profile refreshed successfully');
+            console.log('âœ… Profile refreshed successfully');
             console.log('Address:', userData.address);
             console.log('Municipality:', userData.municipality);
         } else {
@@ -461,3 +461,5 @@ Example:
 
 The location should show in format: "Address, Municipality" or just "Municipality" if no address.
 `);
+
+

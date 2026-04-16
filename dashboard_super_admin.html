@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1134,8 +1134,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
         // Supabase configuration
-        const SUPABASE_URL = 'https://ontuivohwjfkxjwrjnot.supabase.co'
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9udHVpdm9od2pma3hqd3Jqbm90Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2Njg3MTAsImV4cCI6MjA3MDI0NDcxMH0.jGQhshEtfnABK8xNF98WxB10c66vIkTzAoLrhxbeQwE'
+        const SUPABASE_URL = 'https://uaiiwhvulplvzfvtlegt.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhaWl3aHZ1bHBsdnpmdnRsZWd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjU5MjgsImV4cCI6MjA5MTkwMTkyOH0.AEV4LF_6n6Lf4O9dzcjUgi2lMVA_6pIFN0BZnz4P33k'
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
         // Current user ID for tracking
@@ -1330,7 +1330,7 @@
             if (profileName) {
                 const displayName = userData.name || 'Administrator';
                 profileName.textContent = displayName;
-                console.log('✅ Updated profile name to:', displayName);
+                console.log('âœ… Updated profile name to:', displayName);
             }
             
             // Update profile email
@@ -1338,7 +1338,7 @@
             if (profileEmail) {
                 const displayEmail = userData.email || 'admin@anihan.gov.ph';
                 profileEmail.textContent = displayEmail;
-                console.log('✅ Updated profile email to:', displayEmail);
+                console.log('âœ… Updated profile email to:', displayEmail);
             }
             
             // Update profile role
@@ -1346,7 +1346,7 @@
             if (profileRole) {
                 const displayRole = userData.user_type || userData.userType || 'ADMIN';
                 profileRole.textContent = displayRole;
-                console.log('✅ Updated profile role to:', displayRole);
+                console.log('âœ… Updated profile role to:', displayRole);
             }
             
             // Update profile title based on role
@@ -1368,7 +1368,7 @@
             console.log('Raw image URL from database:', userData.image_url);
             
             if (userData.image_url && userData.image_url.trim() !== '' && userData.image_url !== 'null') {
-                console.log('✅ Profile image found - processing...');
+                console.log('âœ… Profile image found - processing...');
                 
                 // Clean up the image URL
                 let cleanImageUrl = userData.image_url.trim();
@@ -1389,13 +1389,13 @@
                     userAvatarIcon.style.display = 'none';
                     
                     userAvatarImage.onerror = function() {
-                        console.error('❌ Main avatar image failed to load');
+                        console.error('âŒ Main avatar image failed to load');
                         this.style.display = 'none';
                         userAvatarIcon.style.display = 'block';
                     };
                     
                     userAvatarImage.onload = function() {
-                        console.log('✅ Main avatar image loaded successfully');
+                        console.log('âœ… Main avatar image loaded successfully');
                     };
                 }
                 
@@ -1406,18 +1406,18 @@
                     profileAvatarIcon.style.display = 'none';
                     
                     profileAvatarImage.onerror = function() {
-                        console.error('❌ Dropdown avatar image failed to load');
+                        console.error('âŒ Dropdown avatar image failed to load');
                         this.style.display = 'none';
                         profileAvatarIcon.style.display = 'block';
                     };
                     
                     profileAvatarImage.onload = function() {
-                        console.log('✅ Dropdown avatar image loaded successfully');
+                        console.log('âœ… Dropdown avatar image loaded successfully');
                     };
                 }
                 
             } else {
-                console.log('❌ No profile image found - showing default icons');
+                console.log('âŒ No profile image found - showing default icons');
                 
                 // Get image elements
                 const userAvatarImage = document.getElementById('userAvatarImage');
@@ -1467,14 +1467,14 @@
                         updateActiveUsersDisplay(0);
                     } else {
                         const userCount = fallbackData ? fallbackData.length : 0;
-                        console.log('✅ Users count (fallback method):', userCount);
+                        console.log('âœ… Users count (fallback method):', userCount);
                         updateActiveUsersDisplay(userCount);
                     }
                     return;
                 }
 
                 const userCount = count || 0;
-                console.log('✅ Users count from database:', userCount);
+                console.log('âœ… Users count from database:', userCount);
                 updateActiveUsersDisplay(userCount);
 
             } catch (error) {
@@ -1489,9 +1489,9 @@
             if (activeUsersElement) {
                 const displayText = count === 1 ? `${count} User` : `${count} Users`;
                 activeUsersElement.textContent = displayText;
-                console.log('✅ Updated active users display to:', displayText);
+                console.log('âœ… Updated active users display to:', displayText);
             } else {
-                console.error('❌ Active users count element not found');
+                console.error('âŒ Active users count element not found');
             }
         }
 
@@ -1537,7 +1537,7 @@
                     return;
                 }
 
-                console.log('✅ Users data fetched:', users);
+                console.log('âœ… Users data fetched:', users);
                 updateUsersTable(users || []);
 
             } catch (error) {
@@ -1552,7 +1552,7 @@
             const tableInfo = document.getElementById('usersTableInfo');
             
             if (!tableBody) {
-                console.error('❌ Users table body not found');
+                console.error('âŒ Users table body not found');
                 return;
             }
 
@@ -1633,7 +1633,7 @@
                 currentPageBtn.textContent = currentPage;
             }
 
-            console.log('✅ Users table updated with', users.length, 'users');
+            console.log('âœ… Users table updated with', users.length, 'users');
         }
 
         // Function to change page
@@ -1663,56 +1663,56 @@
         // Debug function for municipality sales
         async function loadMunicipalitySalesData() {
             try {
-                console.log('🚀 === LOADING MUNICIPALITY SALES DATA ===');
+                console.log('ðŸš€ === LOADING MUNICIPALITY SALES DATA ===');
                 
                 if (!supabaseClient) {
-                    console.error('❌ Supabase client not available');
+                    console.error('âŒ Supabase client not available');
                     updateMunicipalitySalesTable([]);
                     return;
                 }
 
                 // Step 1: Get all sellers from store-owner table
-                console.log('📡 Step 1: Fetching all sellers from store-owner table...');
+                console.log('ðŸ“¡ Step 1: Fetching all sellers from store-owner table...');
                 const { data: sellers, error: sellersError } = await supabaseClient
                     .from('store-owner')
                     .select('user_id');
                 
                 if (sellersError) {
-                    console.error('❌ Error fetching sellers:', sellersError);
+                    console.error('âŒ Error fetching sellers:', sellersError);
                     updateMunicipalitySalesTable([]);
                     return;
                 }
                 
-                console.log(`📊 Found ${sellers?.length || 0} sellers in store-owner table`);
-                console.log('📊 Sample sellers:', sellers?.slice(0, 3));
+                console.log(`ðŸ“Š Found ${sellers?.length || 0} sellers in store-owner table`);
+                console.log('ðŸ“Š Sample sellers:', sellers?.slice(0, 3));
                 
                 if (!sellers || sellers.length === 0) {
-                    console.warn('⚠️ No sellers found in store-owner table');
+                    console.warn('âš ï¸ No sellers found in store-owner table');
                     updateMunicipalitySalesTable([]);
                     return;
                 }
                 
                 // Extract seller user IDs
                 const sellerUserIds = sellers.map(seller => seller.user_id);
-                console.log('👥 Seller user IDs (first 5):', sellerUserIds.slice(0, 5));
+                console.log('ðŸ‘¥ Seller user IDs (first 5):', sellerUserIds.slice(0, 5));
                 
                 // Step 2: Get seller details with municipality from users table
-                console.log('📡 Step 2: Fetching seller details from users table...');
+                console.log('ðŸ“¡ Step 2: Fetching seller details from users table...');
                 const { data: sellerUsers, error: usersError } = await supabaseClient
                     .from('users')
                     .select('id, full_name, municipality')
                     .in('id', sellerUserIds);
                 
                 if (usersError) {
-                    console.error('❌ Error fetching seller users:', usersError);
+                    console.error('âŒ Error fetching seller users:', usersError);
                     updateMunicipalitySalesTable([]);
                     return;
                 }
                 
-                console.log(`� Found ${sellerUsers?.length || 0} seller users`);
+                console.log(`ï¿½ Found ${sellerUsers?.length || 0} seller users`);
                 
                 if (!sellerUsers || sellerUsers.length === 0) {
-                    console.warn('⚠️ No seller users found');
+                    console.warn('âš ï¸ No seller users found');
                     updateMunicipalitySalesTable([]);
                     return;
                 }
@@ -1724,15 +1724,15 @@
                     .in('user_id', sellerUserIds);
                 
                 if (productsError) {
-                    console.error('❌ Error fetching seller products:', productsError);
+                    console.error('âŒ Error fetching seller products:', productsError);
                     updateMunicipalitySalesTable([]);
                     return;
                 }
                 
-                console.log(`🛍️ Found ${sellerProducts?.length || 0} products from sellers`);
+                console.log(`ðŸ›ï¸ Found ${sellerProducts?.length || 0} products from sellers`);
                 
                 if (!sellerProducts || sellerProducts.length === 0) {
-                    console.warn('⚠️ No products found from sellers');
+                    console.warn('âš ï¸ No products found from sellers');
                     updateMunicipalitySalesTable([]);
                     return;
                 }
@@ -1746,15 +1746,15 @@
                     .in('product_id', productIds);
                 
                 if (orderItemsError) {
-                    console.error('❌ Error fetching order items:', orderItemsError);
+                    console.error('âŒ Error fetching order items:', orderItemsError);
                     updateMunicipalitySalesTable([]);
                     return;
                 }
                 
-                console.log(`� Found ${orderItems?.length || 0} order items for seller products`);
+                console.log(`ï¿½ Found ${orderItems?.length || 0} order items for seller products`);
                 
                 if (!orderItems || orderItems.length === 0) {
-                    console.warn('⚠️ No order items found for seller products');
+                    console.warn('âš ï¸ No order items found for seller products');
                     updateMunicipalitySalesTable([]);
                     return;
                 }
@@ -1762,20 +1762,20 @@
                 const orderIds = [...new Set(orderItems.map(item => item.order_id))];
                 
                 // Step 5: Get the full orders for these order IDs
-                console.log('📡 Step 5: Fetching orders (all statuses)...');
+                console.log('ðŸ“¡ Step 5: Fetching orders (all statuses)...');
                 const { data: orders, error: ordersError } = await supabaseClient
                     .from('orders')
                     .select('id, user_id, total, created_at, status')
                     .in('id', orderIds);
                 
                 if (ordersError) {
-                    console.error('❌ Error fetching orders:', ordersError);
+                    console.error('âŒ Error fetching orders:', ordersError);
                     updateMunicipalitySalesTable([]);
                     return;
                 }
                 
-                console.log(`📦 Found ${orders?.length || 0} orders (all statuses)`);
-                console.log('📦 Sample orders:', orders?.slice(0, 3));
+                console.log(`ðŸ“¦ Found ${orders?.length || 0} orders (all statuses)`);
+                console.log('ðŸ“¦ Sample orders:', orders?.slice(0, 3));
                 
                 // Check order statuses
                 if (orders && orders.length > 0) {
@@ -1783,16 +1783,16 @@
                     orders.forEach(order => {
                         statusCounts[order.status] = (statusCounts[order.status] || 0) + 1;
                     });
-                    console.log('📊 Order status breakdown:', statusCounts);
+                    console.log('ðŸ“Š Order status breakdown:', statusCounts);
                 }
                 
                 if (ordersError) {
-                    console.error('❌ Error fetching orders:', ordersError);
+                    console.error('âŒ Error fetching orders:', ordersError);
                     updateMunicipalitySalesTable([]);
                     return;
                 }
                 
-                console.log(`� Found ${orders?.length || 0} completed orders`);
+                console.log(`ï¿½ Found ${orders?.length || 0} completed orders`);
                 
                 // Step 6: Calculate sales by municipality
                 const salesByMunicipality = {};
@@ -1836,7 +1836,7 @@
                     }
                 }
 
-                console.log('📊 Sales by municipality (seller attribution):', salesByMunicipality);
+                console.log('ðŸ“Š Sales by municipality (seller attribution):', salesByMunicipality);
 
                 // Convert to array and sort by total sales
                 const aggregatedData = Object.values(salesByMunicipality)
@@ -1849,26 +1849,26 @@
                 const endIndex = startIndex + municipalitiesPerPage;
                 const paginatedData = aggregatedData.slice(startIndex, endIndex);
 
-                console.log(`✅ Final result: ${aggregatedData.length} municipalities found`);
-                console.log('🏆 Top municipalities by seller sales:', paginatedData);
+                console.log(`âœ… Final result: ${aggregatedData.length} municipalities found`);
+                console.log('ðŸ† Top municipalities by seller sales:', paginatedData);
 
                 updateMunicipalitySalesTable(paginatedData);
 
             } catch (error) {
-                console.error('❌ Error in loadMunicipalitySalesData:', error);
+                console.error('âŒ Error in loadMunicipalitySalesData:', error);
                 updateMunicipalitySalesTable([]);
             }
         }
 
         // Function to update the municipality sales table
         function updateMunicipalitySalesTable(municipalityData) {
-            console.log('🔄 Updating municipality sales table with data:', municipalityData);
+            console.log('ðŸ”„ Updating municipality sales table with data:', municipalityData);
             
             const tableBody = document.getElementById('municipalitySalesTableBody');
             const tableInfo = document.getElementById('municipalitySalesTableInfo');
             
             if (!tableBody) {
-                console.error('❌ Municipality sales table body not found');
+                console.error('âŒ Municipality sales table body not found');
                 return;
             }
 
@@ -1876,7 +1876,7 @@
             tableBody.innerHTML = '';
 
             if (municipalityData.length === 0) {
-                console.log('⚠️ No municipality data to display');
+                console.log('âš ï¸ No municipality data to display');
                 tableBody.innerHTML = `
                     <tr>
                         <td colspan="3" class="text-center text-muted">
@@ -1891,7 +1891,7 @@
                 return;
             }
 
-            console.log(`📊 Displaying ${municipalityData.length} municipalities`);
+            console.log(`ðŸ“Š Displaying ${municipalityData.length} municipalities`);
 
             // Populate table with municipality sales data
             municipalityData.forEach(data => {
@@ -1910,7 +1910,7 @@
                 `;
                 tableBody.appendChild(row);
                 
-                console.log(`📍 Added row: ${data.municipality} - ${formattedSales} (${data.orderCount} orders)`);
+                console.log(`ðŸ“ Added row: ${data.municipality} - ${formattedSales} (${data.orderCount} orders)`);
             });
 
             // Update table info and pagination
@@ -1927,22 +1927,22 @@
                 currentMunicipalityPageBtn.textContent = currentMunicipalityPage;
             }
 
-            console.log('✅ Municipality sales table updated successfully');
+            console.log('âœ… Municipality sales table updated successfully');
         }
 
         // Debug function to manually check municipality data
         async function debugMunicipalityData() {
-            console.log('🔍 === MANUAL DEBUG: MUNICIPALITY DATA ===');
+            console.log('ðŸ” === MANUAL DEBUG: MUNICIPALITY DATA ===');
             
             if (!supabaseClient) {
-                console.error('❌ Supabase client not available');
+                console.error('âŒ Supabase client not available');
                 alert('Supabase client not available - check connection');
                 return;
             }
 
             try {
                 // Check if orders table exists and has data
-                console.log('📦 Checking orders table...');
+                console.log('ðŸ“¦ Checking orders table...');
                 const { data: ordersCheck, error: ordersError } = await supabaseClient
                     .from('orders')
                     .select('id, total, status, user_id')
@@ -1951,21 +1951,21 @@
                 console.log('Orders table check:', { ordersCheck, ordersError });
                 
                 if (ordersError) {
-                    console.error('❌ Orders table error:', ordersError);
+                    console.error('âŒ Orders table error:', ordersError);
                     alert(`Orders table error: ${ordersError.message}`);
                     return;
                 }
                 
                 if (!ordersCheck || ordersCheck.length === 0) {
-                    console.log('⚠️ No orders found in database');
+                    console.log('âš ï¸ No orders found in database');
                     alert('No orders found in the database. You need to add some orders first.');
                     return;
                 }
                 
-                console.log('✅ Orders table accessible, sample data:', ordersCheck);
+                console.log('âœ… Orders table accessible, sample data:', ordersCheck);
                 
                 // Check users table
-                console.log('👥 Checking users table...');
+                console.log('ðŸ‘¥ Checking users table...');
                 const { data: usersCheck, error: usersError } = await supabaseClient
                     .from('users')
                     .select('id, full_name, municipality')
@@ -1974,13 +1974,13 @@
                 console.log('Users table check:', { usersCheck, usersError });
                 
                 if (usersError) {
-                    console.error('❌ Users table error:', usersError);
+                    console.error('âŒ Users table error:', usersError);
                     alert(`Users table error: ${usersError.message}`);
                     return;
                 }
                 
                 // Check JOIN query
-                console.log('🔗 Testing JOIN query...');
+                console.log('ðŸ”— Testing JOIN query...');
                 const { data: joinTest, error: joinError } = await supabaseClient
                     .from('orders')
                     .select(`
@@ -1998,7 +1998,7 @@
                 console.log('JOIN test:', { joinTest, joinError });
                 
                 if (joinError) {
-                    console.error('❌ JOIN query error:', joinError);
+                    console.error('âŒ JOIN query error:', joinError);
                     alert(`JOIN query error: ${joinError.message}`);
                     return;
                 }
@@ -2009,13 +2009,13 @@
                     .select('id, status, total, users!orders_user_id_fkey(municipality)');
                 
                 if (allOrdersError) {
-                    console.error('❌ Error fetching all orders:', allOrdersError);
+                    console.error('âŒ Error fetching all orders:', allOrdersError);
                     return;
                 }
                 
                 const statuses = [...new Set(allOrders.map(o => o.status))];
-                console.log('📊 Available order statuses:', statuses);
-                console.log('📊 Orders by status:', 
+                console.log('ðŸ“Š Available order statuses:', statuses);
+                console.log('ðŸ“Š Orders by status:', 
                     statuses.map(status => ({
                         status,
                         count: allOrders.filter(o => o.status === status).length
@@ -2024,21 +2024,21 @@
                 
                 // Show municipalities
                 const municipalities = [...new Set(allOrders.map(o => o.users?.municipality).filter(Boolean))];
-                console.log('�️ Municipalities found in users:', municipalities);
+                console.log('ï¿½ï¸ Municipalities found in users:', municipalities);
                 
                 // Now try to load the municipality data
-                console.log('🔄 Triggering loadMunicipalitySalesData...');
+                console.log('ðŸ”„ Triggering loadMunicipalitySalesData...');
                 await loadMunicipalitySalesData();
                 
             } catch (error) {
-                console.error('❌ Debug error:', error);
+                console.error('âŒ Debug error:', error);
                 alert(`Debug error: ${error.message}`);
             }
         }
 
         // Simple test function for municipality data
         async function testMunicipalityData() {
-            console.log('🔍 === SIMPLE MUNICIPALITY TEST ===');
+            console.log('ðŸ” === SIMPLE MUNICIPALITY TEST ===');
             
             if (!supabaseClient) {
                 alert('Supabase client not available');
@@ -2047,7 +2047,7 @@
 
             try {
                 // Test the exact query we use for municipality sales
-                console.log('🔍 Testing municipality sales query...');
+                console.log('ðŸ” Testing municipality sales query...');
                 const { data: ordersData, error } = await supabaseClient
                     .from('orders')
                     .select(`
@@ -2085,20 +2085,20 @@
                 });
 
                 const result = `Municipality Sales Test Results:
-• Total orders: ${ordersData.length}
-• Orders with valid sales: ${validSales}
-• Total sales amount: ₱${totalSales.toFixed(2)}
-• Unique municipalities: ${municipalities.size}
-• Municipalities found: ${Array.from(municipalities).join(', ')}
+â€¢ Total orders: ${ordersData.length}
+â€¢ Orders with valid sales: ${validSales}
+â€¢ Total sales amount: â‚±${totalSales.toFixed(2)}
+â€¢ Unique municipalities: ${municipalities.size}
+â€¢ Municipalities found: ${Array.from(municipalities).join(', ')}
 
-${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
+${validSales > 0 ? 'âœ… Data looks good!' : 'âŒ No valid sales data found'}`;
 
                 console.log(result);
                 alert(result);
 
                 // Try to load the actual data if valid
                 if (validSales > 0) {
-                    console.log('🔄 Triggering loadMunicipalitySalesData...');
+                    console.log('ðŸ”„ Triggering loadMunicipalitySalesData...');
                     await loadMunicipalitySalesData();
                 }
 
@@ -2131,16 +2131,16 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
         // Community Analytics Functions
         async function loadCommunityData() {
             try {
-                console.log('🚀 === LOADING COMMUNITY DATA ===');
+                console.log('ðŸš€ === LOADING COMMUNITY DATA ===');
                 
                 if (!supabaseClient) {
-                    console.error('❌ Supabase client not available');
+                    console.error('âŒ Supabase client not available');
                     updateCommunityTable([]);
                     return;
                 }
 
                 // Step 1: Get all communities first
-                console.log('📡 Fetching communities...');
+                console.log('ðŸ“¡ Fetching communities...');
                 const { data: communities, error: communitiesError } = await supabaseClient
                     .from('communities')
                     .select(`
@@ -2151,21 +2151,21 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     `);
                 
                 if (communitiesError) {
-                    console.error('❌ Error fetching communities:', communitiesError);
+                    console.error('âŒ Error fetching communities:', communitiesError);
                     updateCommunityTable([]);
                     return;
                 }
                 
-                console.log(`📊 Found ${communities?.length || 0} communities`);
+                console.log(`ðŸ“Š Found ${communities?.length || 0} communities`);
                 
                 if (!communities || communities.length === 0) {
-                    console.warn('⚠️ No communities found');
+                    console.warn('âš ï¸ No communities found');
                     updateCommunityTable([]);
                     return;
                 }
 
                 // Step 2: Get member counts for each community
-                console.log('📡 Fetching member counts...');
+                console.log('ðŸ“¡ Fetching member counts...');
                 const communityData = [];
                 for (const community of communities) {
                     const { count, error: countError } = await supabaseClient
@@ -2174,7 +2174,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                         .eq('community_id', community.id);
 
                     if (countError) {
-                        console.warn(`⚠️ Error getting count for community ${community.name}:`, countError);
+                        console.warn(`âš ï¸ Error getting count for community ${community.name}:`, countError);
                     }
 
                     communityData.push({
@@ -2196,26 +2196,26 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 const endIndex = startIndex + communitiesPerPage;
                 const paginatedData = communityData.slice(startIndex, endIndex);
 
-                console.log(`✅ Final result: ${communityData.length} communities found`);
-                console.log('🏆 Top communities:', paginatedData);
+                console.log(`âœ… Final result: ${communityData.length} communities found`);
+                console.log('ðŸ† Top communities:', paginatedData);
 
                 updateCommunityTable(paginatedData);
 
             } catch (error) {
-                console.error('❌ Error in loadCommunityData:', error);
+                console.error('âŒ Error in loadCommunityData:', error);
                 updateCommunityTable([]);
             }
         }
 
         // Function to update the community table
         function updateCommunityTable(communityData) {
-            console.log('🔄 Updating community table with data:', communityData);
+            console.log('ðŸ”„ Updating community table with data:', communityData);
             
             const tableBody = document.getElementById('communityTableBody');
             const tableInfo = document.getElementById('communityTableInfo');
             
             if (!tableBody) {
-                console.error('❌ Community table body not found');
+                console.error('âŒ Community table body not found');
                 return;
             }
 
@@ -2223,7 +2223,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             tableBody.innerHTML = '';
 
             if (communityData.length === 0) {
-                console.log('⚠️ No community data to display');
+                console.log('âš ï¸ No community data to display');
                 tableBody.innerHTML = `
                     <tr>
                         <td colspan="3" class="text-center text-muted">
@@ -2238,7 +2238,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 return;
             }
 
-            console.log(`📊 Displaying ${communityData.length} communities`);
+            console.log(`ðŸ“Š Displaying ${communityData.length} communities`);
 
             // Populate table with community data
             communityData.forEach(data => {
@@ -2260,7 +2260,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 `;
                 tableBody.appendChild(row);
                 
-                console.log(`🏘️ Added row: ${data.name} - ${data.memberCount} members`);
+                console.log(`ðŸ˜ï¸ Added row: ${data.name} - ${data.memberCount} members`);
             });
 
             // Update table info and pagination
@@ -2277,7 +2277,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 currentCommunityPageBtn.textContent = currentCommunityPage;
             }
 
-            console.log('✅ Community table updated successfully');
+            console.log('âœ… Community table updated successfully');
         }
 
         // Function to change community page
@@ -2307,19 +2307,19 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 const countSpan = document.getElementById('allCommunitiesCount');
                 
                 if (!tableBody) {
-                    console.error('❌ Communities table body not found');
+                    console.error('âŒ Communities table body not found');
                     return;
                 }
 
                 tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Loading communities...</td></tr>';
 
                 if (!supabaseClient) {
-                    console.error('❌ Supabase client not available');
+                    console.error('âŒ Supabase client not available');
                     tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Database connection not available</td></tr>';
                     return;
                 }
 
-                console.log('🔄 Loading all communities for modal...');
+                console.log('ðŸ”„ Loading all communities for modal...');
 
                 // Step 1: Get all communities first
                 const { data: communities, error: communitiesError } = await supabaseClient
@@ -2332,12 +2332,12 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     `);
 
                 if (communitiesError) {
-                    console.error('❌ Error loading communities:', communitiesError);
+                    console.error('âŒ Error loading communities:', communitiesError);
                     tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading communities</td></tr>';
                     return;
                 }
 
-                console.log(`📊 Found ${communities?.length || 0} communities`);
+                console.log(`ðŸ“Š Found ${communities?.length || 0} communities`);
 
                 if (!communities || communities.length === 0) {
                     tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No communities found</td></tr>';
@@ -2354,7 +2354,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                         .eq('community_id', community.id);
 
                     if (countError) {
-                        console.warn(`⚠️ Error getting count for community ${community.name}:`, countError);
+                        console.warn(`âš ï¸ Error getting count for community ${community.name}:`, countError);
                     }
 
                     communitiesWithCounts.push({
@@ -2363,7 +2363,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     });
                 }
 
-                console.log('📊 Communities with member counts:', communitiesWithCounts);
+                console.log('ðŸ“Š Communities with member counts:', communitiesWithCounts);
 
                 // Sort by member count (descending)
                 communitiesWithCounts.sort((a, b) => b.memberCount - a.memberCount);
@@ -2391,7 +2391,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     `;
                     tableBody.appendChild(row);
                     
-                    console.log(`🏘️ Added community: ${community.name} - ${community.memberCount} members`);
+                    console.log(`ðŸ˜ï¸ Added community: ${community.name} - ${community.memberCount} members`);
                 });
 
                 if (countSpan) {
@@ -2404,10 +2404,10 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 // Setup search functionality
                 setupCommunitySearch();
 
-                console.log(`✅ All communities modal loaded with ${communitiesWithCounts.length} communities`);
+                console.log(`âœ… All communities modal loaded with ${communitiesWithCounts.length} communities`);
 
             } catch (error) {
-                console.error('❌ Error in loadAllCommunities:', error);
+                console.error('âŒ Error in loadAllCommunities:', error);
                 const tableBody = document.getElementById('allCommunitiesTableBody');
                 if (tableBody) {
                     tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading data</td></tr>';
@@ -2468,7 +2468,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             link.click();
             document.body.removeChild(link);
             
-            console.log('✅ Communities exported to CSV successfully');
+            console.log('âœ… Communities exported to CSV successfully');
         }
 
         function exportCommunitiesToPDF() {
@@ -2548,7 +2548,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 
                 // Clean up
                 document.body.removeChild(tempDiv);
-                console.log('✅ Communities exported to PDF successfully');
+                console.log('âœ… Communities exported to PDF successfully');
             }).catch(error => {
                 console.error('Error generating PDF:', error);
                 document.body.removeChild(tempDiv);
@@ -2566,7 +2566,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
         // Initialize top selling products chart
         async function initTopProductsChart() {
             try {
-                console.log('🚀 === INITIALIZING TOP SELLING PRODUCTS CHART ===');
+                console.log('ðŸš€ === INITIALIZING TOP SELLING PRODUCTS CHART ===');
                 
                 if (topProductsChart && typeof topProductsChart.destroy === 'function') {
                     topProductsChart.destroy();
@@ -2575,7 +2575,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
 
                 const canvas = document.getElementById('topProductsChart');
                 if (!canvas) {
-                    console.warn('⚠️ Top products chart canvas not found');
+                    console.warn('âš ï¸ Top products chart canvas not found');
                     return;
                 }
 
@@ -2586,7 +2586,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 await updateTopProductsChart();
 
             } catch (error) {
-                console.error('❌ Error initializing top products chart:', error);
+                console.error('âŒ Error initializing top products chart:', error);
             }
         }
 
@@ -2643,7 +2643,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     });
                 }
 
-                console.log(`✅ Loaded ${allBatangasMunicipalities.length} municipalities for filter`);
+                console.log(`âœ… Loaded ${allBatangasMunicipalities.length} municipalities for filter`);
 
             } catch (error) {
                 console.error('Error loading municipalities:', error);
@@ -2653,10 +2653,10 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
         // Update top selling products chart based on filters
         async function updateTopProductsChart() {
             try {
-                console.log('🔄 Updating top selling products chart...');
+                console.log('ðŸ”„ Updating top selling products chart...');
                 
                 if (!supabaseClient) {
-                    console.error('❌ Supabase client not available');
+                    console.error('âŒ Supabase client not available');
                     renderTopProductsChart([], 'all', '10', 'monthly');
                     return;
                 }
@@ -2694,19 +2694,19 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     .lte('created_at', now.toISOString());
 
                 if (ordersError) {
-                    console.error('❌ Error fetching orders:', ordersError);
+                    console.error('âŒ Error fetching orders:', ordersError);
                     renderTopProductsChart([], municipalityFilter, limitFilter, periodFilter);
                     return;
                 }
 
                 if (!orders || orders.length === 0) {
-                    console.warn('⚠️ No orders found for selected period');
+                    console.warn('âš ï¸ No orders found for selected period');
                     renderTopProductsChart([], municipalityFilter, limitFilter, periodFilter);
                     return;
                 }
 
                 const orderIds = orders.map(o => o.id);
-                console.log(`📦 Found ${orderIds.length} orders in ${periodFilter} period`);
+                console.log(`ðŸ“¦ Found ${orderIds.length} orders in ${periodFilter} period`);
 
                 // Get order items with product details and user info for these orders
                 let query = supabaseClient
@@ -2733,15 +2733,15 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 const { data: orderItems, error: orderItemsError } = await query;
                 
                 if (orderItemsError) {
-                    console.error('❌ Error fetching order items:', orderItemsError);
+                    console.error('âŒ Error fetching order items:', orderItemsError);
                     renderTopProductsChart([], municipalityFilter, limitFilter, periodFilter);
                     return;
                 }
                 
-                console.log(`📦 Found ${orderItems?.length || 0} total order items`);
+                console.log(`ðŸ“¦ Found ${orderItems?.length || 0} total order items`);
                 
                 if (!orderItems || orderItems.length === 0) {
-                    console.warn('⚠️ No order items found');
+                    console.warn('âš ï¸ No order items found');
                     renderTopProductsChart([], municipalityFilter, limitFilter, periodFilter);
                     return;
                 }
@@ -2753,7 +2753,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                         const municipality = item.my_products?.users?.municipality;
                         return municipality === municipalityFilter;
                     });
-                    console.log(`🔍 Filtered to ${filteredItems.length} items for ${municipalityFilter}`);
+                    console.log(`ðŸ” Filtered to ${filteredItems.length} items for ${municipalityFilter}`);
                 }
 
                 // Group by product and calculate metrics
@@ -2796,7 +2796,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     productsArray = productsArray.slice(0, limit);
                 }
 
-                console.log(`✅ Processed ${productsArray.length} products`);
+                console.log(`âœ… Processed ${productsArray.length} products`);
                 console.log('Top 5 products:', productsArray.slice(0, 5));
 
                 // Store current data for exports
@@ -2810,7 +2810,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 renderTopProductsChart(productsArray, municipalityFilter, limitFilter, periodFilter);
 
             } catch (error) {
-                console.error('💥 Error updating top products chart:', error);
+                console.error('ðŸ’¥ Error updating top products chart:', error);
                 renderTopProductsChart([], 'all', '10', 'monthly');
             }
         }
@@ -2825,7 +2825,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
 
                 const canvas = document.getElementById('topProductsChart');
                 if (!canvas) {
-                    console.warn('⚠️ Top products chart canvas not found');
+                    console.warn('âš ï¸ Top products chart canvas not found');
                     return;
                 }
 
@@ -2871,7 +2871,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                         labels: labels,
                         datasets: [
                             {
-                                label: 'Revenue (₱)',
+                                label: 'Revenue (â‚±)',
                                 data: revenueData,
                                 backgroundColor: 'rgba(40, 167, 69, 0.7)',
                                 borderColor: 'rgba(40, 167, 69, 1)',
@@ -2917,8 +2917,8 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                     },
                                     label: function(context) {
                                         const product = productsData[context.dataIndex];
-                                        if (context.dataset.label === 'Revenue (₱)') {
-                                            return `Revenue: ₱${product.totalRevenue.toLocaleString('en-PH', {minimumFractionDigits: 2})}`;
+                                        if (context.dataset.label === 'Revenue (â‚±)') {
+                                            return `Revenue: â‚±${product.totalRevenue.toLocaleString('en-PH', {minimumFractionDigits: 2})}`;
                                         } else {
                                             return `Quantity Sold: ${product.totalSold} units`;
                                         }
@@ -2948,12 +2948,12 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                 position: 'left',
                                 title: {
                                     display: true,
-                                    text: 'Revenue (₱)',
+                                    text: 'Revenue (â‚±)',
                                     font: { size: 12, weight: 'bold' }
                                 },
                                 ticks: {
                                     callback: function(value) {
-                                        return '₱' + value.toLocaleString('en-PH');
+                                        return 'â‚±' + value.toLocaleString('en-PH');
                                     }
                                 }
                             },
@@ -2979,10 +2979,10 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     }
                 });
 
-                console.log('✅ Top products chart rendered successfully');
+                console.log('âœ… Top products chart rendered successfully');
 
             } catch (error) {
-                console.error('❌ Error rendering top products chart:', error);
+                console.error('âŒ Error rendering top products chart:', error);
             }
         }
 
@@ -3121,7 +3121,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     return;
                 }
 
-                console.log('🔄 Loading all municipality sales for modal...');
+                console.log('ðŸ”„ Loading all municipality sales for modal...');
 
                 // Use the same logic as the main function - seller attribution
                 // Step 1: Get all sellers
@@ -3214,7 +3214,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     }
                 }
 
-                console.log('📊 All municipality sales calculated:', salesByMunicipality);
+                console.log('ðŸ“Š All municipality sales calculated:', salesByMunicipality);
 
                 // Convert to array and sort by total sales
                 const aggregatedData = Object.values(salesByMunicipality)
@@ -3250,7 +3250,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     countSpan.textContent = `${aggregatedData.length} municipalities found`;
                 }
 
-                console.log(`✅ All municipality sales modal loaded with ${aggregatedData.length} municipalities`);
+                console.log(`âœ… All municipality sales modal loaded with ${aggregatedData.length} municipalities`);
 
                 // Store data for search functionality
                 window.allMunicipalityData = aggregatedData;
@@ -3465,7 +3465,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             
             salesChart.data.datasets[0].label = datasetLabel;
             salesChart.update('active');
-            console.log(`✅ Sales chart updated with real ${period} data`);
+            console.log(`âœ… Sales chart updated with real ${period} data`);
         }
 
         // Function to show sample data when no real data is available
@@ -3509,7 +3509,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             salesChart.data.datasets[0].label = period === 'weekly' ? 'Weekly Sales' : 
                                                period === 'yearly' ? 'Annual Sales' : 'Monthly Sales';
             salesChart.update();
-            console.log(`✅ Sales chart updated with sample ${period} data (no real orders found)`);
+            console.log(`âœ… Sales chart updated with sample ${period} data (no real orders found)`);
         }
 
         // Function to show fallback chart when there are errors
@@ -3553,7 +3553,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             salesChart.data.datasets[0].label = period === 'weekly' ? 'Weekly Sales' : 
                                                period === 'yearly' ? 'Annual Sales' : 'Monthly Sales';
             salesChart.update();
-            console.log(`✅ Sales chart updated with fallback ${period} demo data`);
+            console.log(`âœ… Sales chart updated with fallback ${period} demo data`);
         }
 
         // Function to show all users modal
@@ -3590,7 +3590,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     return;
                 }
 
-                console.log('✅ All users data fetched:', users);
+                console.log('âœ… All users data fetched:', users);
                 updateAllUsersTable(users || []);
                 
                 // Store data globally for search functionality
@@ -3611,7 +3611,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             const usersCount = document.getElementById('allUsersCount');
             
             if (!tableBody) {
-                console.error('❌ All users table body not found');
+                console.error('âŒ All users table body not found');
                 return;
             }
 
@@ -3683,7 +3683,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 usersCount.textContent = `${users.length} users found`;
             }
 
-            console.log('✅ All users modal table updated with', users.length, 'users');
+            console.log('âœ… All users modal table updated with', users.length, 'users');
         }
 
         // Function to setup user search functionality
@@ -3947,7 +3947,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 
                 // Clean up
                 document.body.removeChild(tempDiv);
-                console.log('✅ Users exported to PDF successfully');
+                console.log('âœ… Users exported to PDF successfully');
             }).catch(error => {
                 console.error('Error generating PDF:', error);
                 document.body.removeChild(tempDiv);
@@ -3983,14 +3983,14 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                         updateActiveFarmersDisplay(0);
                     } else {
                         const farmersCount = fallbackData ? fallbackData.length : 0;
-                        console.log('✅ Farmers count (fallback method):', farmersCount);
+                        console.log('âœ… Farmers count (fallback method):', farmersCount);
                         updateActiveFarmersDisplay(farmersCount);
                     }
                     return;
                 }
 
                 const farmersCount = count || 0;
-                console.log('✅ Farmers count from database:', farmersCount);
+                console.log('âœ… Farmers count from database:', farmersCount);
                 updateActiveFarmersDisplay(farmersCount);
 
             } catch (error) {
@@ -4005,9 +4005,9 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             if (activeFarmersElement) {
                 const displayText = count === 1 ? `${count} Farmer` : `${count} Farmers`;
                 activeFarmersElement.textContent = displayText;
-                console.log('✅ Updated active farmers display to:', displayText);
+                console.log('âœ… Updated active farmers display to:', displayText);
             } else {
-                console.error('❌ Active farmers count element not found');
+                console.error('âŒ Active farmers count element not found');
             }
         }
 
@@ -4039,14 +4039,14 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                         updateAvailableProductsDisplay(0);
                     } else {
                         const productsCount = fallbackData ? fallbackData.length : 0;
-                        console.log('✅ Products count (fallback method):', productsCount);
+                        console.log('âœ… Products count (fallback method):', productsCount);
                         updateAvailableProductsDisplay(productsCount);
                     }
                     return;
                 }
 
                 const productsCount = count || 0;
-                console.log('✅ Products count from my_products table:', productsCount);
+                console.log('âœ… Products count from my_products table:', productsCount);
                 updateAvailableProductsDisplay(productsCount);
 
             } catch (error) {
@@ -4061,9 +4061,9 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             if (availableProductsElement) {
                 const displayText = count === 1 ? `${count} Product` : `${count} Products`;
                 availableProductsElement.textContent = displayText;
-                console.log('✅ Updated available products display to:', displayText);
+                console.log('âœ… Updated available products display to:', displayText);
             } else {
-                console.error('❌ Available products count element not found');
+                console.error('âŒ Available products count element not found');
             }
         }
 
@@ -4083,8 +4083,8 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
 
         // Chart.js Analytics Implementation
         const allAnalytics = [
-            {category: "Sales", metric: "Rice Sales", value: "₱950,000", location: "Quezon Province", period: "Monthly", growth: "+15.2%", status: "High"},
-            {category: "Sales", metric: "Vegetable Sales", value: "₱750,000", location: "Bataan Province", period: "Monthly", growth: "+8.7%", status: "Good"},
+            {category: "Sales", metric: "Rice Sales", value: "â‚±950,000", location: "Quezon Province", period: "Monthly", growth: "+15.2%", status: "High"},
+            {category: "Sales", metric: "Vegetable Sales", value: "â‚±750,000", location: "Bataan Province", period: "Monthly", growth: "+8.7%", status: "Good"},
             {category: "Stocks", metric: "Total Inventory", value: "15,750 tons", location: "All Warehouses", period: "Daily", growth: "+2.1%", status: "85% Capacity"},
             {category: "Stocks", metric: "Rice Stock", value: "8,200 tons", location: "Central Warehouse", period: "Daily", growth: "+5.3%", status: "Available"},
             {category: "Stocks", metric: "Vegetable Stock", value: "4,850 tons", location: "Regional Warehouses", period: "Daily", growth: "-1.5%", status: "Low Stock"},
@@ -4102,12 +4102,12 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
         async function exportChart(chartType, format) {
             try {
                 console.log('========================================');
-                console.log('🎯 EXPORT STARTED');
-                console.log('📊 Chart Type:', chartType);
-                console.log('📄 Format:', format);
+                console.log('ðŸŽ¯ EXPORT STARTED');
+                console.log('ðŸ“Š Chart Type:', chartType);
+                console.log('ðŸ“„ Format:', format);
                 console.log('========================================');
-                console.log('🔍 === DATA AVAILABILITY CHECK ===');
-                console.log('🌾 currentCropInsightData:', {
+                console.log('ðŸ” === DATA AVAILABILITY CHECK ===');
+                console.log('ðŸŒ¾ currentCropInsightData:', {
                     exists: !!currentCropInsightData,
                     hasFullData: !!currentCropInsightData?.fullData,
                     fullDataLength: currentCropInsightData?.fullData?.length || 0,
@@ -4115,14 +4115,14 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     period: currentCropInsightData?.period,
                     filter: currentCropInsightData?.filter
                 });
-                console.log('🏆 currentTopProductsData:', {
+                console.log('ðŸ† currentTopProductsData:', {
                     exists: !!currentTopProductsData,
                     hasProducts: !!currentTopProductsData?.products,
                     productsLength: currentTopProductsData?.products?.length || 0,
                     period: currentTopProductsData?.period,
                     municipality: currentTopProductsData?.municipality
                 });
-                console.log('🔍 === END DATA CHECK ===');
+                console.log('ðŸ” === END DATA CHECK ===');
                 
                 const chartMap = {
                     sales: salesChart,
@@ -4136,8 +4136,8 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 const chart = chartMap[chartType];
                 const filename = chartType + '_analytics_super_admin_' + new Date().toISOString().split('T')[0];
                 
-                console.log('📁 Filename:', filename);
-                console.log('📊 Chart exists:', !!chart);
+                console.log('ðŸ“ Filename:', filename);
+                console.log('ðŸ“Š Chart exists:', !!chart);
                 
                 switch(format) {
                     case 'csv':
@@ -4154,7 +4154,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                         break;
                 }
             } catch (error) {
-                console.error('❌ Error in exportChart:', error);
+                console.error('âŒ Error in exportChart:', error);
                 alert('Export error: ' + error.message);
             }
         }
@@ -4170,13 +4170,13 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 console.log('Land Cultivated:', currentCropInsightData.landCultivated);
                 console.log('Land Units:', currentCropInsightData.landUnits);
             } else {
-                console.log('❌ currentCropInsightData is null or undefined');
+                console.log('âŒ currentCropInsightData is null or undefined');
             }
         }
 
         // NEW: Comprehensive debug function
         function debugExportData() {
-            console.log('🔍 === EXPORT DATA DEBUG ===');
+            console.log('ðŸ” === EXPORT DATA DEBUG ===');
             
             // Check chart objects
             console.log('Charts available:', {
@@ -4213,7 +4213,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 });
             }
             
-            console.log('🔍 === END DEBUG ===');
+            console.log('ðŸ” === END DEBUG ===');
         }
         
 
@@ -4227,7 +4227,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             let headers = '';
             let dataRows = '';
             
-            console.log('📥 Exporting CSV for:', chartType);
+            console.log('ðŸ“¥ Exporting CSV for:', chartType);
             
             if (chartType === 'sales' && currentSalesData) {
                 // Use real sales data
@@ -4238,11 +4238,11 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 });
                 csv = headers + dataRows;
             } else if (chartType === 'cropInsight') {
-                console.log('🌾 Processing crop insight CSV export...');
-                console.log('🌾 currentCropInsightData:', currentCropInsightData);
-                console.log('🌾 currentCropInsightData exists?', !!currentCropInsightData);
-                console.log('🌾 fullData exists?', !!currentCropInsightData?.fullData);
-                console.log('🌾 fullData length:', currentCropInsightData?.fullData?.length || 0);
+                console.log('ðŸŒ¾ Processing crop insight CSV export...');
+                console.log('ðŸŒ¾ currentCropInsightData:', currentCropInsightData);
+                console.log('ðŸŒ¾ currentCropInsightData exists?', !!currentCropInsightData);
+                console.log('ðŸŒ¾ fullData exists?', !!currentCropInsightData?.fullData);
+                console.log('ðŸŒ¾ fullData length:', currentCropInsightData?.fullData?.length || 0);
                 
                 if (currentCropInsightData && currentCropInsightData.fullData) {
                     const periodFilter = document.getElementById('cropInsightPeriodFilter')?.value || 'monthly';
@@ -4254,16 +4254,16 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     currentCropInsightData.fullData.forEach(crop => {
                         csv += `${crop.crop},${crop.harvest.toFixed(2)},${crop.overproduction.toFixed(2)},${crop.landCultivated.toFixed(2)},${crop.landUnit}\n`;
                     });
-                    console.log('✅ Crop insight CSV prepared with', currentCropInsightData.fullData.length, 'crops');
+                    console.log('âœ… Crop insight CSV prepared with', currentCropInsightData.fullData.length, 'crops');
                 } else {
-                    console.error('❌❌❌ CRITICAL: No crop insight data available!');
-                    console.error('❌ currentCropInsightData is:', currentCropInsightData);
+                    console.error('âŒâŒâŒ CRITICAL: No crop insight data available!');
+                    console.error('âŒ currentCropInsightData is:', currentCropInsightData);
                     alert('ERROR: Crop insight data not loaded yet. Please wait for the chart to finish loading and try again.');
                     csv = 'Crop Name,Harvested (tons),Overproduction (tons),Land Cultivated,Land Unit\n"No data available",0,0,0,ha\n';
                 }
 
             } else if (chartType === 'stocks') {
-                console.log('📦 Processing stocks export...');
+                console.log('ðŸ“¦ Processing stocks export...');
                 
                 // Get products data - try multiple sources
                 let productsData = window.lastFetchedProductsForExport 
@@ -4313,7 +4313,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 }
                 csv = headers + dataRows;
             } else if (chartType === 'hectare') {
-                console.log('📊 Processing hectare export...');
+                console.log('ðŸ“Š Processing hectare export...');
                 // Export hectare data with all three units
                 headers = 'Period,Hectares,Square Meters,Meters\n';
                 
@@ -4328,11 +4328,11 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 }
                 csv = headers + dataRows;
             } else if (chartType === 'topProducts') {
-                console.log('🏆 Processing top products CSV export...');
-                console.log('🏆 currentTopProductsData:', currentTopProductsData);
-                console.log('🏆 currentTopProductsData exists?', !!currentTopProductsData);
-                console.log('🏆 products exists?', !!currentTopProductsData?.products);
-                console.log('🏆 products length:', currentTopProductsData?.products?.length || 0);
+                console.log('ðŸ† Processing top products CSV export...');
+                console.log('ðŸ† currentTopProductsData:', currentTopProductsData);
+                console.log('ðŸ† currentTopProductsData exists?', !!currentTopProductsData);
+                console.log('ðŸ† products exists?', !!currentTopProductsData?.products);
+                console.log('ðŸ† products length:', currentTopProductsData?.products?.length || 0);
                 
                 if (currentTopProductsData && currentTopProductsData.products) {
                     const periodFilter = currentTopProductsData.period || 'monthly';
@@ -4340,19 +4340,19 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     const periodLabel = periodFilter === 'weekly' ? 'Weekly' : periodFilter === 'yearly' ? 'Yearly' : 'Monthly';
                     const municipalityLabel = municipalityFilter === 'all' ? 'All Municipalities' : municipalityFilter;
                     
-                    csv = `Top Selling Products Report\nPeriod: ${periodLabel}\nMunicipality: ${municipalityLabel}\n\nProduct Name,Category,Total Sold,Total Revenue (₱),Order Count\n`;
+                    csv = `Top Selling Products Report\nPeriod: ${periodLabel}\nMunicipality: ${municipalityLabel}\n\nProduct Name,Category,Total Sold,Total Revenue (â‚±),Order Count\n`;
                     currentTopProductsData.products.forEach(product => {
                         csv += `"${product.productName}","${product.category}",${product.totalSold},${product.totalRevenue.toFixed(2)},${product.orderCount}\n`;
                     });
-                    console.log('✅ Top products CSV prepared with', currentTopProductsData.products.length, 'products');
+                    console.log('âœ… Top products CSV prepared with', currentTopProductsData.products.length, 'products');
                 } else {
-                    console.error('❌❌❌ CRITICAL: No top products data available!');
-                    console.error('❌ currentTopProductsData is:', currentTopProductsData);
+                    console.error('âŒâŒâŒ CRITICAL: No top products data available!');
+                    console.error('âŒ currentTopProductsData is:', currentTopProductsData);
                     alert('ERROR: Top products data not loaded yet. Please wait for the chart to finish loading and try again.');
-                    csv = 'Product Name,Category,Total Sold,Total Revenue (₱),Order Count\n"No data available","Unknown",0,0,0\n';
+                    csv = 'Product Name,Category,Total Sold,Total Revenue (â‚±),Order Count\n"No data available","Unknown",0,0,0\n';
                 }
             } else {
-                console.log('⚠️ Using fallback export for:', chartType);
+                console.log('âš ï¸ Using fallback export for:', chartType);
                 // Fallback to chart data for other chart types
                 csv = 'Label,Value\n';
                 
@@ -4372,17 +4372,17 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                         csv += `${label},${value}\n`;
                     });
                 } else {
-                    console.error('❌ No chart data found for:', chartType);
+                    console.error('âŒ No chart data found for:', chartType);
                 }
             }
             
             if (!csv || csv.trim() === '' || csv === 'Label,Value\n') {
-                console.error('❌ CSV is empty!');
+                console.error('âŒ CSV is empty!');
                 alert('No data available to export.');
                 return;
             }
             
-            console.log('✅ Downloading CSV file...', filename);
+            console.log('âœ… Downloading CSV file...', filename);
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -4466,8 +4466,8 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     margin: { left: leftMargin, right: rightMargin }
                 });
             } else if (chartType === 'cropInsight') {
-                console.log('📄 Processing crop insight PDF export...');
-                console.log('🌾 currentCropInsightData:', currentCropInsightData);
+                console.log('ðŸ“„ Processing crop insight PDF export...');
+                console.log('ðŸŒ¾ currentCropInsightData:', currentCropInsightData);
                 
                 if (currentCropInsightData && currentCropInsightData.fullData) {
                     const periodFilter = document.getElementById('cropInsightPeriodFilter')?.value || 'monthly';
@@ -4518,9 +4518,9 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                         styles: { fontSize: 9 }
                     });
                     
-                    console.log('✅ Crop insight PDF generated with', currentCropInsightData.fullData.length, 'crops');
+                    console.log('âœ… Crop insight PDF generated with', currentCropInsightData.fullData.length, 'crops');
                 } else {
-                    console.log('⚠️ No crop insight data available');
+                    console.log('âš ï¸ No crop insight data available');
                     doc.text('No crop insight data available', leftMargin, yPosition);
                 }
             } else if (chartType === 'soil' && typeof soilChart !== 'undefined' && soilChart) {
@@ -4654,8 +4654,8 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     });
                 }
             } else if (chartType === 'topProducts') {
-                console.log('📄 Processing top products PDF export...');
-                console.log('🏆 currentTopProductsData:', currentTopProductsData);
+                console.log('ðŸ“„ Processing top products PDF export...');
+                console.log('ðŸ† currentTopProductsData:', currentTopProductsData);
                 
                 if (currentTopProductsData && currentTopProductsData.products) {
                     const period = currentTopProductsData.period === 'weekly' ? 'Weekly' : currentTopProductsData.period === 'yearly' ? 'Yearly' : 'Monthly';
@@ -4727,9 +4727,9 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                         styles: { fontSize: 9 }
                     });
                     
-                    console.log('✅ Top products PDF generated with', currentTopProductsData.products.length, 'products');
+                    console.log('âœ… Top products PDF generated with', currentTopProductsData.products.length, 'products');
                 } else {
-                    console.log('⚠️ No top products data available');
+                    console.log('âš ï¸ No top products data available');
                     doc.text('No top products data available', leftMargin, yPosition);
                 }
             }
@@ -4744,7 +4744,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
         }
 
         function exportToWord(chartType, filename) {
-            console.log('📝 Exporting to Word:', chartType);
+            console.log('ðŸ“ Exporting to Word:', chartType);
             console.log('Current crop insight data:', currentCropInsightData);
             
             const targetElement = document.querySelector('#' + chartType + 'Chart');
@@ -4757,7 +4757,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     let dataTableHTML = '';
                     
                     if (chartType === 'sales' && currentSalesData) {
-                        console.log('📊 Processing sales data...');
+                        console.log('ðŸ“Š Processing sales data...');
                         dataTableHTML = `
                             <h2>Sales Data Table</h2>
                             <table border="1" style="border-collapse: collapse; width: 100%; margin: 20px 0;">
@@ -4803,7 +4803,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                             </table>
                         `;
                     } else if (chartType === 'soil' && typeof soilChart !== 'undefined' && soilChart) {
-                        console.log('🌱 Processing soil data...');
+                        console.log('ðŸŒ± Processing soil data...');
                         const soilData = soilChart.data;
                         console.log('Soil chart data:', soilData);
                         
@@ -4845,11 +4845,11 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                 </table>
                             `;
                         } else {
-                            console.warn('⚠️ Soil chart data not available');
+                            console.warn('âš ï¸ Soil chart data not available');
                             dataTableHTML = `<p><em>No soil data available for export.</em></p>`;
                         }
                     } else if (chartType === 'hectare' && typeof hectareChart !== 'undefined' && hectareChart) {
-                        console.log('📊 Processing hectare data...');
+                        console.log('ðŸ“Š Processing hectare data...');
                         const hectareData = hectareChart.data;
                         console.log('Hectare chart data:', hectareData);
                         
@@ -4907,12 +4907,12 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                 </table>
                             `;
                         } else {
-                            console.warn('⚠️ Hectare chart data not available');
+                            console.warn('âš ï¸ Hectare chart data not available');
                             dataTableHTML = `<p><em>No hectare data available for export.</em></p>`;
                         }
                     } else if (chartType === 'cropInsight') {
-                        console.log('🌾 Processing crop insight data for Word export...');
-                        console.log('🌾 currentCropInsightData:', currentCropInsightData);
+                        console.log('ðŸŒ¾ Processing crop insight data for Word export...');
+                        console.log('ðŸŒ¾ currentCropInsightData:', currentCropInsightData);
                         
                         if (currentCropInsightData && currentCropInsightData.fullData) {
                             const periodFilter = document.getElementById('cropInsightPeriodFilter')?.value || 'monthly';
@@ -4965,13 +4965,13 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                     </tbody>
                                 </table>
                             `;
-                            console.log('✅ Crop insight Word export prepared with', currentCropInsightData.fullData.length, 'crops');
+                            console.log('âœ… Crop insight Word export prepared with', currentCropInsightData.fullData.length, 'crops');
                         } else {
-                            console.warn('⚠️ No crop data available');
+                            console.warn('âš ï¸ No crop data available');
                             dataTableHTML = `<p><em>No crop data available for export.</em></p>`;
                         }
                     } else if (chartType === 'stocks') {
-                        console.log('📦 Processing stocks data for Word export...');
+                        console.log('ðŸ“¦ Processing stocks data for Word export...');
                         
                         // Get products data - try multiple sources
                         let productsData = window.lastFetchedProductsForExport 
@@ -5032,7 +5032,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                     </table>
                                 `;
                             } else {
-                                console.warn('⚠️ No products data available');
+                                console.warn('âš ï¸ No products data available');
                                 dataTableHTML = `<p><em>No stocks data available for export.</em></p>`;
                             }
                         } else {
@@ -5084,13 +5084,13 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                     </table>
                                 `;
                             } else {
-                                console.warn('⚠️ No products data available');
+                                console.warn('âš ï¸ No products data available');
                                 dataTableHTML = `<p><em>No stocks data available for export.</em></p>`;
                             }
                         }
                     } else if (chartType === 'topProducts') {
-                        console.log('🏆 Processing top products data for Word export...');
-                        console.log('🏆 currentTopProductsData:', currentTopProductsData);
+                        console.log('ðŸ† Processing top products data for Word export...');
+                        console.log('ðŸ† currentTopProductsData:', currentTopProductsData);
                         
                         if (currentTopProductsData && currentTopProductsData.products) {
                             const period = currentTopProductsData.period === 'weekly' ? 'Weekly' : currentTopProductsData.period === 'yearly' ? 'Yearly' : 'Monthly';
@@ -5165,13 +5165,13 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                     </tbody>
                                 </table>
                             `;
-                            console.log('✅ Top products Word export prepared with', currentTopProductsData.products.length, 'products');
+                            console.log('âœ… Top products Word export prepared with', currentTopProductsData.products.length, 'products');
                         } else {
-                            console.warn('⚠️ No top products data available');
+                            console.warn('âš ï¸ No top products data available');
                             dataTableHTML = `<p><em>No top products data available for export.</em></p>`;
                         }
                     } else {
-                        console.warn('⚠️ Chart data not available for:', chartType);
+                        console.warn('âš ï¸ Chart data not available for:', chartType);
                         dataTableHTML = `<p><em>No data available for ${chartType} chart.</em></p>`;
                     }
                     
@@ -5693,15 +5693,15 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     .select('soil_type');
                 
                 if (error) {
-                    console.error('❌ Error fetching stores for soil analytics:', error);
+                    console.error('âŒ Error fetching stores for soil analytics:', error);
                     console.log('Using default soil data instead');
                     return;
                 }
                 
-                console.log(`🌱 Soil Analytics: Found ${stores?.length || 0} store owners in database`);
+                console.log(`ðŸŒ± Soil Analytics: Found ${stores?.length || 0} store owners in database`);
                 
                 if (!stores || stores.length === 0) {
-                    console.log('⚠️ No soil data found in database, charts will show default data');
+                    console.log('âš ï¸ No soil data found in database, charts will show default data');
                     return;
                 }
                 
@@ -5733,7 +5733,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     }
                 }
                 
-                console.log('🌱 Soil analytics updated from database:', Object.keys(soilTypeMap));
+                console.log('ðŸŒ± Soil analytics updated from database:', Object.keys(soilTypeMap));
             } catch (err) {
                 console.error('Exception updating soil analytics:', err);
                 console.log('Using default soil data instead');
@@ -5929,20 +5929,20 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     .select('name, quantity, category');
                     
                 if (error) {
-                    console.error('❌ Error fetching products for stock analytics:', error);
+                    console.error('âŒ Error fetching products for stock analytics:', error);
                     return;
                 }
                 
-                console.log(`📦 Stock Analytics: Found ${products?.length || 0} products in database`);
+                console.log(`ðŸ“¦ Stock Analytics: Found ${products?.length || 0} products in database`);
                 
                 if (!products || products.length === 0) {
-                    console.log('⚠️ No products found in database, charts will show default data');
+                    console.log('âš ï¸ No products found in database, charts will show default data');
                     return;
                 }
                 
                 // Store for export - AFTER error checking
                 window.lastFetchedProductsForExport = products;
-                console.log('✅ Stored products for export:', products.length, 'items');
+                console.log('âœ… Stored products for export:', products.length, 'items');
                 
                 // Group by product name with quantity and status
                 const nameMap = {};
@@ -5979,7 +5979,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 const statusColors = analyticsData.stocks.status.colors;
                 analyticsData.stocks.status.colors = analyticsData.stocks.status.labels.map((_, i) => statusColors[i % statusColors.length]);
                 
-                console.log('📊 Stock analytics updated from database:', {
+                console.log('ðŸ“Š Stock analytics updated from database:', {
                     products: Object.keys(nameMap),
                     status: Object.keys(statusMap)
                 });
@@ -6008,11 +6008,11 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
 
         // Comprehensive chart inspection function
         window.inspectCharts = function() {
-            console.log('🔍 === COMPREHENSIVE CHART INSPECTION ===');
+            console.log('ðŸ” === COMPREHENSIVE CHART INSPECTION ===');
             
             // Inspect Crop Insight Chart
             if (cropInsightChart) {
-                console.log('🌾 CROP INSIGHT CHART:');
+                console.log('ðŸŒ¾ CROP INSIGHT CHART:');
                 console.log('  Chart exists:', !!cropInsightChart);
                 console.log('  Chart data:', cropInsightChart.data);
                 console.log('  Labels:', cropInsightChart.data?.labels);
@@ -6029,12 +6029,12 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     });
                 }
             } else {
-                console.log('🌾 CROP INSIGHT CHART: Not available');
+                console.log('ðŸŒ¾ CROP INSIGHT CHART: Not available');
             }
             
             // Inspect Top Products Chart
             if (topProductsChart) {
-                console.log('🏆 TOP PRODUCTS CHART:');
+                console.log('ðŸ† TOP PRODUCTS CHART:');
                 console.log('  Chart exists:', !!topProductsChart);
                 console.log('  Chart data:', topProductsChart.data);
                 console.log('  Labels:', topProductsChart.data?.labels);
@@ -6051,11 +6051,11 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     });
                 }
             } else {
-                console.log('🏆 TOP PRODUCTS CHART: Not available');
+                console.log('ðŸ† TOP PRODUCTS CHART: Not available');
             }
             
             // Inspect stored data
-            console.log('📁 STORED DATA:');
+            console.log('ðŸ“ STORED DATA:');
             console.log('  currentCropInsightData:', !!currentCropInsightData);
             if (currentCropInsightData) {
                 console.log('    fullData count:', currentCropInsightData.fullData?.length || 0);
@@ -6067,38 +6067,38 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 console.log('    sample:', currentTopProductsData.products?.slice(0, 2));
             }
             
-            console.log('🔍 === END INSPECTION ===');
+            console.log('ðŸ” === END INSPECTION ===');
         };
 
         // Direct chart export test
         window.testDirectChartExport = function() {
-            console.log('🚀 === DIRECT CHART EXPORT TEST ===');
+            console.log('ðŸš€ === DIRECT CHART EXPORT TEST ===');
             
             // Inspect what we have
             inspectCharts();
             
             // Try to export crop insight directly from chart
             if (cropInsightChart?.data?.labels?.length > 0) {
-                console.log('🌾 Attempting crop insight export...');
+                console.log('ðŸŒ¾ Attempting crop insight export...');
                 exportChart('cropInsight', 'csv');
             } else {
-                console.log('❌ No crop insight chart data available');
+                console.log('âŒ No crop insight chart data available');
             }
             
             // Try to export top products directly from chart  
             if (topProductsChart?.data?.labels?.length > 0) {
-                console.log('🏆 Attempting top products export...');
+                console.log('ðŸ† Attempting top products export...');
                 exportChart('topProducts', 'csv');
             } else {
-                console.log('❌ No top products chart data available');
+                console.log('âŒ No top products chart data available');
             }
             
-            console.log('🚀 === END TEST ===');
+            console.log('ðŸš€ === END TEST ===');
         };
 
         // Test export function that guarantees data
         window.forceExportWithData = function() {
-            console.log('🚀 === FORCE EXPORT TEST ===');
+            console.log('ðŸš€ === FORCE EXPORT TEST ===');
             
             // Force set sample data
             currentCropInsightData = {
@@ -6124,35 +6124,35 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 limit: '10'
             };
             
-            console.log('✅ Sample data set. Now try the exports:');
-            console.log('📊 Crop insight data ready:', currentCropInsightData.fullData.length, 'crops');
-            console.log('📊 Top products data ready:', currentTopProductsData.products.length, 'products');
-            console.log('🚀 === END TEST ===');
+            console.log('âœ… Sample data set. Now try the exports:');
+            console.log('ðŸ“Š Crop insight data ready:', currentCropInsightData.fullData.length, 'crops');
+            console.log('ðŸ“Š Top products data ready:', currentTopProductsData.products.length, 'products');
+            console.log('ðŸš€ === END TEST ===');
         };
 
         // Test export function
         window.testCropExport = async function() {
-            console.log('🧪 === MANUAL EXPORT TEST ===');
-            console.log('🌾 Before refresh - Current data:', !!currentCropInsightData);
+            console.log('ðŸ§ª === MANUAL EXPORT TEST ===');
+            console.log('ðŸŒ¾ Before refresh - Current data:', !!currentCropInsightData);
             
             // Force refresh first
             await updateCropInsightChart();
             
-            console.log('🌾 After refresh - Current data:', !!currentCropInsightData);
+            console.log('ðŸŒ¾ After refresh - Current data:', !!currentCropInsightData);
             if (currentCropInsightData) {
-                console.log('🌾 FullData:', currentCropInsightData.fullData?.length || 0);
-                console.log('🌾 Sample data:', currentCropInsightData.fullData?.slice(0, 2));
+                console.log('ðŸŒ¾ FullData:', currentCropInsightData.fullData?.length || 0);
+                console.log('ðŸŒ¾ Sample data:', currentCropInsightData.fullData?.slice(0, 2));
             }
             
             // Try export
             await exportChart('cropInsight', 'csv');
-            console.log('🧪 === END TEST ===');
+            console.log('ðŸ§ª === END TEST ===');
         };
 
         // Debug function to check data status
         window.debugDataStatus = function() {
-            console.log('🔍 === DEBUG DATA STATUS ===');
-            console.log('🌾 Crop Insight Data:', {
+            console.log('ðŸ” === DEBUG DATA STATUS ===');
+            console.log('ðŸŒ¾ Crop Insight Data:', {
                 exists: !!currentCropInsightData,
                 hasFullData: !!(currentCropInsightData?.fullData),
                 fullDataLength: currentCropInsightData?.fullData?.length || 0,
@@ -6162,7 +6162,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 period: currentCropInsightData?.period,
                 filter: currentCropInsightData?.filter
             });
-            console.log('🏆 Top Products Data:', {
+            console.log('ðŸ† Top Products Data:', {
                 exists: !!currentTopProductsData,
                 hasProducts: !!(currentTopProductsData?.products),
                 productsLength: currentTopProductsData?.products?.length || 0,
@@ -6170,22 +6170,22 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 period: currentTopProductsData?.period,
                 municipality: currentTopProductsData?.municipality
             });
-            console.log('📊 Charts:', {
+            console.log('ðŸ“Š Charts:', {
                 cropInsightChart: !!cropInsightChart,
                 topProductsChart: !!topProductsChart
             });
             
             // Force refresh data
-            console.log('🔄 Forcing data refresh...');
+            console.log('ðŸ”„ Forcing data refresh...');
             updateCropInsightChart().then(() => {
-                console.log('🌾 Crop insight refreshed:', !!currentCropInsightData);
-                console.log('🌾 Full data after refresh:', currentCropInsightData?.fullData?.slice(0, 2));
+                console.log('ðŸŒ¾ Crop insight refreshed:', !!currentCropInsightData);
+                console.log('ðŸŒ¾ Full data after refresh:', currentCropInsightData?.fullData?.slice(0, 2));
             });
             updateTopProductsChart().then(() => {
-                console.log('🏆 Top products refreshed:', !!currentTopProductsData);
-                console.log('🏆 Products after refresh:', currentTopProductsData?.products?.slice(0, 2));
+                console.log('ðŸ† Top products refreshed:', !!currentTopProductsData);
+                console.log('ðŸ† Products after refresh:', currentTopProductsData?.products?.slice(0, 2));
             });
-            console.log('🔍 === END DEBUG ===');
+            console.log('ðŸ” === END DEBUG ===');
         };
 
         // Initialize Charts
@@ -6237,7 +6237,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 
                 const canvas = document.getElementById('salesChart');
                 if (!canvas) {
-                    console.warn('⚠️ Sales chart canvas not found');
+                    console.warn('âš ï¸ Sales chart canvas not found');
                     return;
                 }
                 
@@ -6248,7 +6248,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     data: {
                         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                         datasets: [{
-                            label: 'Sales (₱)',
+                            label: 'Sales (â‚±)',
                             data: [0, 0, 0, 0, 0, 0, 0, 14220, 0, 0, 0, 0],
                             borderColor: '#28a745',
                             backgroundColor: 'rgba(40, 167, 69, 0.1)',
@@ -6275,7 +6275,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                 beginAtZero: true,
                                 ticks: {
                                     callback: function(value) {
-                                        return '₱' + value.toLocaleString();
+                                        return 'â‚±' + value.toLocaleString();
                                     }
                                 }
                             }
@@ -6283,7 +6283,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     }
                 });
             } catch (error) {
-                console.error('❌ Error initializing sales chart:', error);
+                console.error('âŒ Error initializing sales chart:', error);
             }
         }
 
@@ -6298,7 +6298,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 
                 const canvas = document.getElementById('stocksChart');
                 if (!canvas) {
-                    console.warn('⚠️ Stocks chart canvas not found');
+                    console.warn('âš ï¸ Stocks chart canvas not found');
                     return;
                 }
                 
@@ -6331,7 +6331,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     }
                 });
             } catch (error) {
-                console.error('❌ Error initializing stocks chart:', error);
+                console.error('âŒ Error initializing stocks chart:', error);
             }
         }
 
@@ -6346,7 +6346,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 
                 const canvas = document.getElementById('soilChart');
                 if (!canvas) {
-                    console.warn('⚠️ Soil chart canvas not found');
+                    console.warn('âš ï¸ Soil chart canvas not found');
                     return;
                 }
                 
@@ -6379,7 +6379,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     }
                 });
             } catch (error) {
-                console.error('❌ Error initializing soil chart:', error);
+                console.error('âŒ Error initializing soil chart:', error);
             }
         }
 
@@ -6394,7 +6394,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 
                 const canvas = document.getElementById('hectareChart');
                 if (!canvas) {
-                    console.warn('⚠️ Hectare chart canvas not found');
+                    console.warn('âš ï¸ Hectare chart canvas not found');
                     return;
                 }
                 
@@ -6463,7 +6463,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     }
                 });
             } catch (error) {
-                console.error('❌ Error initializing hectare chart:', error);
+                console.error('âŒ Error initializing hectare chart:', error);
             }
         }
 
@@ -6479,7 +6479,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 
                 const canvas = document.getElementById('cropInsightChart');
                 if (!canvas) {
-                    console.warn('⚠️ Crop insight chart canvas not found');
+                    console.warn('âš ï¸ Crop insight chart canvas not found');
                     return;
                 }
                 
@@ -6487,7 +6487,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 await updateCropInsightChart('all');
                 
             } catch (error) {
-                console.error('❌ Error initializing crop insight chart:', error);
+                console.error('âŒ Error initializing crop insight chart:', error);
             }
         }
 
@@ -6656,7 +6656,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     filter: filter
                 };
                 
-                console.log('💾 Stored crop insight data for export:', {
+                console.log('ðŸ’¾ Stored crop insight data for export:', {
                     crops: labels.length,
                     period: period,
                     filter: filter,
@@ -6672,7 +6672,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
 
                 // Store landUnits globally for tooltip access
                 window.cropInsightLandUnits = landUnits;
-                console.log('🔵 Global landUnits stored:', window.cropInsightLandUnits);
+                console.log('ðŸ”µ Global landUnits stored:', window.cropInsightLandUnits);
                 
                 // Create stacked bar chart with line overlay
                 cropInsightChart = new Chart(ctx, {
@@ -6771,7 +6771,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                             } else {
                                                 // Get the land unit for this specific crop from global variable
                                                 const dataIndex = context.dataIndex;
-                                                console.log('🟢 Tooltip - DataIndex:', dataIndex, 
+                                                console.log('ðŸŸ¢ Tooltip - DataIndex:', dataIndex, 
                                                     'Global Units:', window.cropInsightLandUnits,
                                                     'Unit at index:', window.cropInsightLandUnits ? window.cropInsightLandUnits[dataIndex] : 'undefined');
                                                 
@@ -6862,7 +6862,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     }
                 });
 
-                console.log('✅ Crop insight chart rendered successfully');
+                console.log('âœ… Crop insight chart rendered successfully');
 
             } catch (error) {
                 console.error('Error rendering crop insight chart:', error);
@@ -6953,14 +6953,14 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                 const totalSalesCountElement = document.getElementById('totalSalesCount');
                 
                 if (totalSalesElement) {
-                    totalSalesElement.textContent = `₱${totalSales.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                    totalSalesElement.textContent = `â‚±${totalSales.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                 }
                 
                 if (totalSalesCountElement) {
                     totalSalesCountElement.textContent = `${totalOrders.toLocaleString()} orders`;
                 }
                 
-                console.log(`Total Sales Updated: ₱${totalSales.toFixed(2)} from ${totalOrders} completed orders`);
+                console.log(`Total Sales Updated: â‚±${totalSales.toFixed(2)} from ${totalOrders} completed orders`);
                 
             } catch (error) {
                 console.error('Error updating total sales display:', error);
@@ -7043,7 +7043,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
             stocksChart.data.datasets[0].backgroundColor = data.colors;
             stocksChart.update();
             
-            console.log(`✅ Stocks chart updated to ${view} view`);
+            console.log(`âœ… Stocks chart updated to ${view} view`);
         }
 
         // Event Listeners for Filters - with error handling
@@ -7354,7 +7354,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
 
         // OLD exportToWord function removed - duplicate was overriding updated function above
         /* function exportToWord(chartType, filename) {
-            console.log('📝 Exporting to Word:', chartType);
+            console.log('ðŸ“ Exporting to Word:', chartType);
             const canvas = document.querySelector('#' + chartType + 'Chart');
             if (canvas) {
                 html2canvas(canvas).then(canvas => {
@@ -7364,7 +7364,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                     let dataTableHTML = '';
                     
                     if (chartType === 'sales' && currentSalesData) {
-                        console.log('📊 Processing sales data for Word export...');
+                        console.log('ðŸ“Š Processing sales data for Word export...');
                         dataTableHTML = `
                             <h2>Sales Data Table</h2>
                             <table border="1" style="border-collapse: collapse; width: 100%; margin: 20px 0;">
@@ -7410,7 +7410,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                             </table>
                         `;
                     } else if (chartType === 'soil') {
-                        console.log('🌱 Processing soil data for Word export...');
+                        console.log('ðŸŒ± Processing soil data for Word export...');
                         // Use analyticsData.soil.type which gets updated from database
                         const soilData = analyticsData.soil.type;
                         console.log('Soil data for export:', soilData);
@@ -7450,11 +7450,11 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                 </table>
                             `;
                         } else {
-                            console.warn('⚠️ Soil data not available for Word export');
+                            console.warn('âš ï¸ Soil data not available for Word export');
                             dataTableHTML = `<p><em>No soil data available for export.</em></p>`;
                         }
                     } else if (chartType === 'hectare') {
-                        console.log('📊 Processing hectare data for Word export...');
+                        console.log('ðŸ“Š Processing hectare data for Word export...');
                         // Use analyticsData.hectare.monthly which gets updated from database
                         const hectareData = analyticsData.hectare.monthly;
                         console.log('Hectare data for export:', hectareData);
@@ -7508,11 +7508,11 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                 </table>
                             `;
                         } else {
-                            console.warn('⚠️ Hectare data not available for Word export');
+                            console.warn('âš ï¸ Hectare data not available for Word export');
                             dataTableHTML = `<p><em>No hectare data available for export.</em></p>`;
                         }
                     } else if (chartType === 'stocks') {
-                        console.log('📦 Processing stocks data for Word export...');
+                        console.log('ðŸ“¦ Processing stocks data for Word export...');
                         
                         // Get products data - try multiple sources
                         let productsData = window.lastFetchedProductsForExport 
@@ -7573,7 +7573,7 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                     </table>
                                 `;
                             } else {
-                                console.warn('⚠️ No products data available');
+                                console.warn('âš ï¸ No products data available');
                                 dataTableHTML = `<p><em>No stocks data available for export.</em></p>`;
                             }
                         } else {
@@ -7625,12 +7625,12 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
                                     </table>
                                 `;
                             } else {
-                                console.warn('⚠️ No products data available');
+                                console.warn('âš ï¸ No products data available');
                                 dataTableHTML = `<p><em>No stocks data available for export.</em></p>`;
                             }
                         }
                     } else {
-                        console.warn('⚠️ Chart data not available for:', chartType);
+                        console.warn('âš ï¸ Chart data not available for:', chartType);
                         dataTableHTML = `<p><em>No data available for ${chartType} chart.</em></p>`;
                     }
                     
@@ -7689,3 +7689,4 @@ ${validSales > 0 ? '✅ Data looks good!' : '❌ No valid sales data found'}`;
     </script>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -245,7 +245,7 @@
                                             <small class="form-text text-muted">Enter the number of vouchers to create</small>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="minimumSpend" class="form-label">Minimum Spend (₱) <span class="text-danger">*</span></label>
+                                            <label for="minimumSpend" class="form-label">Minimum Spend (â‚±) <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control" id="minimumSpend" name="minimumSpend" placeholder="0.00" min="0" max="999999.99" step="0.01" required autocomplete="off">
                                             <small class="form-text text-muted">Minimum amount required to use this voucher</small>
                                         </div>
@@ -424,16 +424,16 @@
                 // Always prefer the shared Supabase client if available
                 if (typeof window.supabaseClient !== 'undefined' && window.supabaseClient) {
                     voucherSupabaseClient = window.supabaseClient;
-                    console.log('✅ Using existing shared Supabase client');
+                    console.log('âœ… Using existing shared Supabase client');
                     return;
                 }
                 
                 // Check if there's already a global supabase client
                 if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
                     // Only create if no existing client found
-                    console.log('⚠️ No shared client found, creating new instance...');
-                    const SUPABASE_URL = 'https://ontuivohwjfkxjwrjnot.supabase.co';
-                    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9udHVpdm9od2pma3hqd3Jqbm90Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2Njg3MTAsImV4cCI6MjA3MDI0NDcxMH0.jGQhshEtfnABK8xNF98WxB10c66vIkTzAoLrhxbeQwE';
+                    console.log('âš ï¸ No shared client found, creating new instance...');
+                    const SUPABASE_URL = 'https://uaiiwhvulplvzfvtlegt.supabase.co';
+                    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhaWl3aHZ1bHBsdnpmdnRsZWd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjU5MjgsImV4cCI6MjA5MTkwMTkyOH0.AEV4LF_6n6Lf4O9dzcjUgi2lMVA_6pIFN0BZnz4P33k';
                     
                     voucherSupabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
                         auth: {
@@ -442,13 +442,13 @@
                             detectSessionInUrl: false
                         }
                     });
-                    console.log('✅ Supabase client created with minimal auth config');
+                    console.log('âœ… Supabase client created with minimal auth config');
                 } else {
-                    console.error('❌ Supabase library not loaded');
+                    console.error('âŒ Supabase library not loaded');
                     setTimeout(initializeSupabase, 1000); // Retry after 1 second
                 }
             } catch (error) {
-                console.error('❌ Error initializing Supabase:', error);
+                console.error('âŒ Error initializing Supabase:', error);
             }
         }
         
@@ -536,7 +536,7 @@
                     throw error;
                 }
                 
-                console.log('✅ Voucher saved successfully:', data);
+                console.log('âœ… Voucher saved successfully:', data);
                 
                 // Show success notification
                 showSuccessToast({
@@ -549,7 +549,7 @@
                 resetForm();
                 
             } catch (error) {
-                console.error('❌ Error saving voucher:', error);
+                console.error('âŒ Error saving voucher:', error);
                 alert('Error saving voucher: ' + error.message);
             } finally {
                 // Reset button state
@@ -641,3 +641,5 @@
     </script>
 </body>
 </html>
+
+

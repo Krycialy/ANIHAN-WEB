@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -395,8 +395,8 @@
     
     <script>
         // Supabase configuration
-        const SUPABASE_URL = 'https://ontuivohwjfkxjwrjnot.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9udHVpdm9od2pma3hqd3Jqbm90Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2Njg3MTAsImV4cCI6MjA3MDI0NDcxMH0.jGQhshEtfnABK8xNF98WxB10c66vIkTzAoLrhxbeQwE';
+        const SUPABASE_URL = 'https://uaiiwhvulplvzfvtlegt.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhaWl3aHZ1bHBsdnpmdnRsZWd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjU5MjgsImV4cCI6MjA5MTkwMTkyOH0.AEV4LF_6n6Lf4O9dzcjUgi2lMVA_6pIFN0BZnz4P33k';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // Global variables
@@ -614,8 +614,7 @@
 
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if coming from sign-in form with pending authentication
-            const urlParams = new URLSearchParams(window.location.search);
+            // 2FA is disabled: if pending auth exists, complete login immediately.
             const pendingAuth = sessionStorage.getItem('pendingAuth');
             
             if (pendingAuth) {
@@ -628,9 +627,9 @@
                     const maxAge = 5 * 60 * 1000; // 5 minutes
                     
                     if (authAge < maxAge) {
-                        // Valid pending auth, go directly to verification step
                         pendingUser = authData.user;
-                        showVerificationStep(authData.email);
+                        completeLogin();
+                        return;
                     } else {
                         // Auth too old, clear and redirect back
                         sessionStorage.removeItem('pendingAuth');
@@ -806,3 +805,5 @@
     </script>
 </body>
 </html>
+
+

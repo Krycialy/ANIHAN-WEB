@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: krycialys-project
+    env: php
+    plan: free
+    rootDir: .
+    buildCommand: composer install --no-dev --optimize-autoloader --no-interaction
+    startCommand: php -S 0.0.0.0:$PORT -t .
+    healthCheckPath: /sign_in_form.html
+    envVars:
+      - key: APP_ENV
+        value: production

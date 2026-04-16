@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -38,7 +38,7 @@
                         <div class="input-container">
                             <i class="fas fa-lock input-icon"></i>
                             <div class="input-group">
-                                <input type="password" class="form-control" id="password" name="password" placeholder="•••••" required>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="â€¢â€¢â€¢â€¢â€¢" required>
                                 <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                                     <i class="fas fa-eye"></i>
                                 </button>
@@ -81,7 +81,7 @@
                         </button>
                         <br>
                         <button type="button" class="btn btn-link btn-sm" id="backToLoginButton">
-                            ← Back to Login
+                            â† Back to Login
                         </button>
                     </div>
                 </div>
@@ -101,8 +101,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // Supabase configuration
-        const SUPABASE_URL = 'https://ontuivohwjfkxjwrjnot.supabase.co'
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9udHVpdm9od2pma3hqd3Jqbm90Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2Njg3MTAsImV4cCI6MjA3MDI0NDcxMH0.jGQhshEtfnABK8xNF98WxB10c66vIkTzAoLrhxbeQwE'
+        const SUPABASE_URL = 'https://uaiiwhvulplvzfvtlegt.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhaWl3aHZ1bHBsdnpmdnRsZWd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjU5MjgsImV4cCI6MjA5MTkwMTkyOH0.AEV4LF_6n6Lf4O9dzcjUgi2lMVA_6pIFN0BZnz4P33k'
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
         // Global variables for 2FA
@@ -166,8 +166,8 @@
                     
                     // Check if it's the default password
                     if (user.password === '202cb962ac59075b964b07152d234b70') {
-                        console.log('📝 This account uses the default password hash (for "hello")');
-                        console.log('💡 Try logging in with password: "hello"');
+                        console.log('ðŸ“ This account uses the default password hash (for "hello")');
+                        console.log('ðŸ’¡ Try logging in with password: "hello"');
                     }
                 }
                 
@@ -187,10 +187,10 @@
             const result = await authenticateUser(email, password);
             
             if (result) {
-                console.log('✅ Authentication would succeed');
+                console.log('âœ… Authentication would succeed');
                 console.log('User:', result);
             } else {
-                console.log('❌ Authentication would fail');
+                console.log('âŒ Authentication would fail');
             }
             
             return result;
@@ -243,7 +243,7 @@
                 if (admin1 && !error1) {
                     admin = admin1;
                     authMethod = 'hashed';
-                    console.log('✅ Authentication successful with hashed password');
+                    console.log('âœ… Authentication successful with hashed password');
                 }
                 
                 // Method 2: Try with plain text password
@@ -259,7 +259,7 @@
                     if (admin2 && !error2) {
                         admin = admin2;
                         authMethod = 'plain';
-                        console.log('✅ Authentication successful with plain text password');
+                        console.log('âœ… Authentication successful with plain text password');
                     }
                 }
                 
@@ -276,7 +276,7 @@
                     if (admin3 && !error3) {
                         admin = admin3;
                         authMethod = 'default';
-                        console.log('✅ Authentication successful with default password');
+                        console.log('âœ… Authentication successful with default password');
                     }
                 }
                 
@@ -295,7 +295,7 @@
                         if (admin4 && !error4) {
                             admin = admin4;
                             authMethod = 'md5_direct';
-                            console.log('✅ Authentication successful with direct MD5 comparison');
+                            console.log('âœ… Authentication successful with direct MD5 comparison');
                         }
                     }
                 }
@@ -311,7 +311,7 @@
                     
                     return admin;
                 } else {
-                    console.log('❌ All authentication methods failed');
+                    console.log('âŒ All authentication methods failed');
                     console.log('Tried methods:');
                     console.log('- Hashed password:', hashedPassword);
                     console.log('- Plain password:', password);
@@ -443,7 +443,7 @@
                 console.error('Error sending 2FA code:', error);
                 
                 if (error.message === 'NEED_SERVER_SETUP') {
-                    const setupMsg = `📧 Real Email Sending Requires Web Server Setup\n\n🔧 Quick Setup:\n1. Install XAMPP from apachefriends.org\n2. Start Apache service\n3. Copy files to C:\\xampp\\htdocs\\anihanweb\\\n4. Access via http://localhost/anihanweb/\n\n⚠️ Currently running from file:// - emails won't work\n\n🧪 Continue with mock authentication for testing?`;
+                    const setupMsg = `ðŸ“§ Real Email Sending Requires Web Server Setup\n\nðŸ”§ Quick Setup:\n1. Install XAMPP from apachefriends.org\n2. Start Apache service\n3. Copy files to C:\\xampp\\htdocs\\anihanweb\\\n4. Access via http://localhost/anihanweb/\n\nâš ï¸ Currently running from file:// - emails won't work\n\nðŸ§ª Continue with mock authentication for testing?`;
                     
                     const shouldContinue = confirm(setupMsg);
                     if (shouldContinue) {
@@ -602,24 +602,24 @@
             }
         }
         
-        function completeLogin() {
-            if (!pendingUser) {
+        function completeLogin(user = pendingUser) {
+            if (!user) {
                 console.error('No pending user for login completion');
                 return;
             }
             
             // Store user session data
             sessionStorage.setItem('currentUser', JSON.stringify({
-                id: pendingUser.id,
-                name: pendingUser.name,
-                email: pendingUser.email,
-                userType: pendingUser.user_type
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                userType: user.user_type
             }));
             
             // Redirect based on user role using hash routing
-            if (pendingUser.user_type === 'SUPER ADMIN') {
+            if (user.user_type === 'SUPER ADMIN') {
                 window.location.href = 'dashboard_super_admin.html';
-            } else if (pendingUser.user_type === 'SUB ADMIN') {
+            } else if (user.user_type === 'SUB ADMIN') {
                 window.location.href = 'municipality_dashboard.html';
             } else {
                 // Default fallback
@@ -662,15 +662,7 @@
                 const authenticatedUser = await authenticateUser(email, password);
                 
                 if (authenticatedUser) {
-                    // Store user temporarily for 2FA verification
-                    pendingUser = authenticatedUser;
-                    
-                    // Send 2FA code
-                    await send2FACode(email, authenticatedUser.name);
-                    
-                    // Show 2FA verification step
-                    showStep2(email);
-                    
+                    completeLogin(authenticatedUser);
                 } else {
                     // Authentication failed
                     showLoading(false);
@@ -744,18 +736,7 @@
                 const authenticatedUser = await authenticateUser(email, password);
                 
                 if (authenticatedUser) {
-                    // Store user data and redirect to 2FA verification
-                    sessionStorage.setItem('pendingAuth', JSON.stringify({
-                        user: authenticatedUser,
-                        email: email,
-                        timestamp: Date.now()
-                    }));
-                    
-                    // Send 2FA code
-                    await send2FACode(email, authenticatedUser.name);
-                    
-                    // Redirect to authentication page (2FA step)
-                    window.location.href = 'authentication.html';
+                    completeLogin(authenticatedUser);
                 } else {
                     errorMessage.textContent = 'Invalid email or password. Please try again.';
                     errorMessage.style.display = 'block';
@@ -869,3 +850,5 @@
     </script>
 </body>
 </html>
+
+

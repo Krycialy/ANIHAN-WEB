@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -332,8 +332,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
         // Supabase configuration
-        const SUPABASE_URL = 'https://ontuivohwjfkxjwrjnot.supabase.co'
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9udHVpdm9od2pma3hqd3Jqbm90Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2Njg3MTAsImV4cCI6MjA3MDI0NDcxMH0.jGQhshEtfnABK8xNF98WxB10c66vIkTzAoLrhxbeQwE'
+        const SUPABASE_URL = 'https://uaiiwhvulplvzfvtlegt.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhaWl3aHZ1bHBsdnpmdnRsZWd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjU5MjgsImV4cCI6MjA5MTkwMTkyOH0.AEV4LF_6n6Lf4O9dzcjUgi2lMVA_6pIFN0BZnz4P33k'
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
         // Pagination variables
@@ -599,7 +599,7 @@
             if (profileName) {
                 const displayName = userData.name || 'Administrator';
                 profileName.textContent = displayName;
-                console.log('✅ Updated profile name to:', displayName);
+                console.log('âœ… Updated profile name to:', displayName);
             }
             
             // Update profile email
@@ -607,7 +607,7 @@
             if (profileEmail) {
                 const displayEmail = userData.email || 'admin@anihan.gov.ph';
                 profileEmail.textContent = displayEmail;
-                console.log('✅ Updated profile email to:', displayEmail);
+                console.log('âœ… Updated profile email to:', displayEmail);
             }
             
             // Update profile role
@@ -615,7 +615,7 @@
             if (profileRole) {
                 const displayRole = userData.user_type || userData.userType || 'ADMIN';
                 profileRole.textContent = displayRole;
-                console.log('✅ Updated profile role to:', displayRole);
+                console.log('âœ… Updated profile role to:', displayRole);
             }
             
             // Update profile title based on role
@@ -644,7 +644,7 @@
             console.log('Image URL length:', userData.image_url ? userData.image_url.length : 0);
             
             if (userData.image_url && userData.image_url.trim() !== '' && userData.image_url !== 'null') {
-                console.log('✅ Profile image found - processing...');
+                console.log('âœ… Profile image found - processing...');
                 
                 // Clean up the image URL (remove any extra quotes or whitespace)
                 let cleanImageUrl = userData.image_url.trim();
@@ -681,17 +681,17 @@
                     
                     // Handle image load error
                     userAvatarImage.onerror = function() {
-                        console.error('❌ Main avatar image failed to load');
+                        console.error('âŒ Main avatar image failed to load');
                         console.error('Image src preview:', this.src.substring(0, 50) + '...');
                         this.style.display = 'none';
                         userAvatarIcon.style.display = 'block';
                     };
                     
                     userAvatarImage.onload = function() {
-                        console.log('✅ Main avatar image loaded successfully');
+                        console.log('âœ… Main avatar image loaded successfully');
                     };
                 } else {
-                    console.error('❌ Main avatar elements not found');
+                    console.error('âŒ Main avatar elements not found');
                 }
                 
                 // Update dropdown avatar
@@ -703,29 +703,29 @@
                     
                     // Handle image load error
                     profileAvatarImage.onerror = function() {
-                        console.error('❌ Dropdown avatar image failed to load');
+                        console.error('âŒ Dropdown avatar image failed to load');
                         console.error('Image src preview:', this.src.substring(0, 50) + '...');
                         this.style.display = 'none';
                         profileAvatarIcon.style.display = 'block';
                     };
                     
                     profileAvatarImage.onload = function() {
-                        console.log('✅ Dropdown avatar image loaded successfully');
+                        console.log('âœ… Dropdown avatar image loaded successfully');
                     };
                 } else {
-                    console.error('❌ Dropdown avatar elements not found');
+                    console.error('âŒ Dropdown avatar elements not found');
                 }
                 
                 // Test if image URL is accessible (for base64, this should work immediately)
                 if (isBase64) {
-                    console.log('✅ Base64 image detected - should load immediately');
+                    console.log('âœ… Base64 image detected - should load immediately');
                 } else {
                     console.log('Testing external image URL...');
                     testImageUrl(cleanImageUrl);
                 }
                 
             } else {
-                console.log('❌ No profile image found or image URL is empty/null');
+                console.log('âŒ No profile image found or image URL is empty/null');
                 console.log('Image URL value:', userData.image_url);
                 
                 // Get image elements
@@ -738,13 +738,13 @@
                 if (userAvatarImage && userAvatarIcon) {
                     userAvatarImage.style.display = 'none';
                     userAvatarIcon.style.display = 'block';
-                    console.log('✅ Showing main avatar icon (no image)');
+                    console.log('âœ… Showing main avatar icon (no image)');
                 }
                 
                 if (profileAvatarImage && profileAvatarIcon) {
                     profileAvatarImage.style.display = 'none';
                     profileAvatarIcon.style.display = 'block';
-                    console.log('✅ Showing dropdown avatar icon (no image)');
+                    console.log('âœ… Showing dropdown avatar icon (no image)');
                 }
             }
             
@@ -773,7 +773,7 @@
                     return false;
                 }
 
-                console.log('✅ Test users deleted:', deletedUsers);
+                console.log('âœ… Test users deleted:', deletedUsers);
                 
                 // Refresh the admin accounts display
                 loadAdminAccounts();
@@ -805,13 +805,13 @@
                 const adminImagesBucket = buckets.find(bucket => bucket.name === 'admin-images');
                 
                 if (!adminImagesBucket) {
-                    console.error('❌ admin-images bucket does not exist!');
+                    console.error('âŒ admin-images bucket does not exist!');
                     console.error('Available buckets:', buckets.map(b => b.name));
                     alert('Error: admin-images bucket not found. Please create it in Supabase Storage.');
                     return false;
                 }
                 
-                console.log('✓ admin-images bucket found:', adminImagesBucket);
+                console.log('âœ“ admin-images bucket found:', adminImagesBucket);
                 
                 // Test if bucket is public
                 console.log('Bucket is public:', adminImagesBucket.public);
@@ -827,7 +827,7 @@
                     return false;
                 }
                 
-                console.log('✓ Bucket access successful');
+                console.log('âœ“ Bucket access successful');
                 console.log('Files in bucket:', files);
                 return true;
                 
@@ -843,11 +843,11 @@
             
             const testImg = new Image();
             testImg.onload = function() {
-                console.log('✓ Image URL is accessible and valid:', imageUrl);
+                console.log('âœ“ Image URL is accessible and valid:', imageUrl);
                 console.log('Image dimensions:', this.naturalWidth + 'x' + this.naturalHeight);
             };
             testImg.onerror = function() {
-                console.error('✗ Image URL failed to load:', imageUrl);
+                console.error('âœ— Image URL failed to load:', imageUrl);
                 console.error('Possible issues:');
                 console.error('- URL is incorrect or inaccessible');
                 console.error('- CORS policy blocking the image');
@@ -880,21 +880,21 @@
                     return false;
                 }
                 
-                console.log('✓ Test upload successful:', data);
+                console.log('âœ“ Test upload successful:', data);
                 
                 // Get public URL
                 const { data: { publicUrl } } = supabaseClient.storage
                     .from('admin-images')
                     .getPublicUrl(fileName);
                 
-                console.log('✓ Test file public URL:', publicUrl);
+                console.log('âœ“ Test file public URL:', publicUrl);
                 
                 // Clean up - delete test file
                 await supabaseClient.storage
                     .from('admin-images')
                     .remove([fileName]);
                 
-                console.log('✓ Test file cleaned up');
+                console.log('âœ“ Test file cleaned up');
                 return true;
                 
             } catch (error) {
@@ -909,7 +909,7 @@
             
             const fileInput = document.getElementById('uploadImage');
             if (!fileInput.files[0]) {
-                console.error('❌ No file selected. Please select an image first.');
+                console.error('âŒ No file selected. Please select an image first.');
                 return;
             }
             
@@ -924,13 +924,13 @@
             const imageUrl = await uploadImageToSupabase(file, 'admin-images');
             
             if (imageUrl) {
-                console.log('✅ Upload successful!');
+                console.log('âœ… Upload successful!');
                 console.log('Generated URL:', imageUrl);
                 
                 // Test if URL is accessible
                 testImageUrl(imageUrl);
             } else {
-                console.error('❌ Upload failed!');
+                console.error('âŒ Upload failed!');
             }
         };
 
@@ -943,12 +943,12 @@
             try {
                 const { data, error } = await supabaseClient.from('admin_accounts').select('count').limit(1);
                 if (error) {
-                    console.error('❌ Supabase connection failed:', error);
+                    console.error('âŒ Supabase connection failed:', error);
                 } else {
-                    console.log('✅ Supabase connection successful');
+                    console.log('âœ… Supabase connection successful');
                 }
             } catch (e) {
-                console.error('❌ Supabase connection error:', e);
+                console.error('âŒ Supabase connection error:', e);
             }
             
             // 2. Test storage bucket
@@ -961,13 +961,13 @@
             
             // 4. Summary
             console.log('=== SETUP TEST SUMMARY ===');
-            console.log('Supabase connection: ✓');
-            console.log('Storage bucket:', bucketResult ? '✓' : '❌');
-            console.log('Simple upload:', uploadResult ? '✓' : '❌');
+            console.log('Supabase connection: âœ“');
+            console.log('Storage bucket:', bucketResult ? 'âœ“' : 'âŒ');
+            console.log('Simple upload:', uploadResult ? 'âœ“' : 'âŒ');
             
             if (!bucketResult) {
-                console.log('💡 SOLUTION: Create an "admin-images" bucket in Supabase Storage');
-                console.log('💡 Make sure the bucket is set to public if you want public URLs');
+                console.log('ðŸ’¡ SOLUTION: Create an "admin-images" bucket in Supabase Storage');
+                console.log('ðŸ’¡ Make sure the bucket is set to public if you want public URLs');
             }
             
             return { supabase: true, bucket: bucketResult, upload: uploadResult };
@@ -985,15 +985,15 @@
                 });
                 
                 if (error) {
-                    console.error('❌ Failed to create bucket:', error);
-                    console.log('💡 You may need to create the bucket manually in Supabase dashboard');
+                    console.error('âŒ Failed to create bucket:', error);
+                    console.log('ðŸ’¡ You may need to create the bucket manually in Supabase dashboard');
                     return false;
                 } else {
-                    console.log('✅ admin-images bucket created successfully:', data);
+                    console.log('âœ… admin-images bucket created successfully:', data);
                     return true;
                 }
             } catch (e) {
-                console.error('❌ Error creating bucket:', e);
+                console.error('âŒ Error creating bucket:', e);
                 return false;
             }
         };
@@ -1076,7 +1076,7 @@ Common issues:
                         image_url: userData.image_url
                     });
                     
-                    console.log('✅ Profile refreshed successfully');
+                    console.log('âœ… Profile refreshed successfully');
                 } else {
                     console.log('No user data found');
                 }
@@ -1360,7 +1360,7 @@ Common issues:
             const countElement = document.getElementById('allAdminsCount');
             
             if (!tableBody) {
-                console.error('❌ All admins table body not found');
+                console.error('âŒ All admins table body not found');
                 return;
             }
 
@@ -1541,10 +1541,10 @@ Common issues:
                     imageUrl = await uploadImageToSupabase(imageFile, 'admin-images');
                     
                     if (!imageUrl) {
-                        console.error('❌ Image upload failed completely');
+                        console.error('âŒ Image upload failed completely');
                         alert('Warning: Image upload failed. Account will be created without image.');
                     } else {
-                        console.log('✅ Image upload successful:', imageUrl);
+                        console.log('âœ… Image upload successful:', imageUrl);
                         
                         // Test if the URL is accessible (for debugging)
                         testImageUrl(imageUrl);
@@ -1592,7 +1592,7 @@ Common issues:
                 }
                 
                 // Send welcome email notification
-                console.log('🔄 About to send welcome email...');
+                console.log('ðŸ”„ About to send welcome email...');
                 const emailResult = await sendWelcomeEmail({
                     name: formData.name,
                     email: formData.email,
@@ -1603,16 +1603,16 @@ Common issues:
                     imageUrl: imageUrl
                 });
                 
-                console.log('📧 Email result:', emailResult);
+                console.log('ðŸ“§ Email result:', emailResult);
                 
                 let alertMessage = 'Admin account added successfully!' + (imageUrl ? ' Image uploaded successfully.' : ' (No image was uploaded)');
                 
                 if (emailResult && emailResult.success && emailResult.email_sent) {
-                    alertMessage += '\n\n✅ Welcome email sent successfully to ' + formData.email;
+                    alertMessage += '\n\nâœ… Welcome email sent successfully to ' + formData.email;
                 } else if (emailResult && emailResult.success && !emailResult.email_sent) {
-                    alertMessage += '\n\n⚠️ Account created but email could not be sent. Please check email configuration.';
+                    alertMessage += '\n\nâš ï¸ Account created but email could not be sent. Please check email configuration.';
                 } else {
-                    alertMessage += '\n\n❌ Account created but email sending failed: ' + (emailResult?.error || 'Unknown error');
+                    alertMessage += '\n\nâŒ Account created but email sending failed: ' + (emailResult?.error || 'Unknown error');
                 }
                 
                 alert(alertMessage);
@@ -1681,28 +1681,28 @@ Common issues:
                 }
                 
                 const result = await response.json();
-                console.log('✅ PHP backend response parsed:', result);
+                console.log('âœ… PHP backend response parsed:', result);
                 
                 if (result.success) {
-                    console.log('🎉 API call successful');
+                    console.log('ðŸŽ‰ API call successful');
                     if (result.email_sent) {
-                        console.log(`📧 Email sent to: ${result.email_details.recipients.join(', ')}`);
+                        console.log(`ðŸ“§ Email sent to: ${result.email_details.recipients.join(', ')}`);
                     } else {
-                        console.warn('⚠️ Email could not be sent:', result.email_errors || result.warnings);
+                        console.warn('âš ï¸ Email could not be sent:', result.email_errors || result.warnings);
                     }
                 } else {
-                    console.error('❌ API returned failure:', result.error);
+                    console.error('âŒ API returned failure:', result.error);
                 }
                 
                 return result;
                 
             } catch (error) {
-                console.error('💥 Exception in sendWelcomeEmail:', error);
+                console.error('ðŸ’¥ Exception in sendWelcomeEmail:', error);
                 console.error('Error stack:', error.stack);
                 
                 // Check if it's a network error
                 if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                    console.error('🌐 Network error - API might not be accessible');
+                    console.error('ðŸŒ Network error - API might not be accessible');
                 }
                 
                 // Don't throw the error - we don't want email failure to block account creation
@@ -1899,7 +1899,7 @@ Common issues:
                 // Check file size (limit to 5MB for base64)
                 const maxSize = 5 * 1024 * 1024; // 5MB
                 if (file.size > maxSize) {
-                    console.error('❌ File too large. Maximum size: 5MB');
+                    console.error('âŒ File too large. Maximum size: 5MB');
                     alert('Error: Image file is too large. Please choose an image smaller than 5MB.');
                     return null;
                 }
@@ -1910,7 +1910,7 @@ Common issues:
                     
                     reader.onload = function(event) {
                         const base64String = event.target.result;
-                        console.log('✅ Image converted to base64 successfully');
+                        console.log('âœ… Image converted to base64 successfully');
                         console.log('Base64 length:', base64String.length);
                         console.log('Base64 preview:', base64String.substring(0, 50) + '...');
                         console.log('=== IMAGE PROCESSING COMPLETED ===');
@@ -1918,7 +1918,7 @@ Common issues:
                     };
                     
                     reader.onerror = function(error) {
-                        console.error('❌ Error converting image to base64:', error);
+                        console.error('âŒ Error converting image to base64:', error);
                         reject(error);
                     };
                     
@@ -1945,7 +1945,7 @@ Common issues:
                 // Check file size (limit to 10MB for storage)
                 const maxSize = 10 * 1024 * 1024; // 10MB
                 if (file.size > maxSize) {
-                    console.error('❌ File too large. Maximum size: 10MB');
+                    console.error('âŒ File too large. Maximum size: 10MB');
                     alert('Error: Image file is too large. Please choose an image smaller than 10MB.');
                     return null;
                 }
@@ -1964,7 +1964,7 @@ Common issues:
                     });
                 
                 if (error) {
-                    console.error('❌ Upload failed:', error);
+                    console.error('âŒ Upload failed:', error);
                     console.error('Error code:', error.code);
                     console.error('Error message:', error.message);
                     
@@ -1977,7 +1977,7 @@ Common issues:
                     throw error;
                 }
                 
-                console.log('✅ Upload successful:', data);
+                console.log('âœ… Upload successful:', data);
                 
                 // Get public URL
                 const { data: urlData } = supabaseClient.storage
@@ -1985,7 +1985,7 @@ Common issues:
                     .getPublicUrl(fileName);
                 
                 const publicUrl = urlData.publicUrl;
-                console.log('✅ Public URL generated:', publicUrl);
+                console.log('âœ… Public URL generated:', publicUrl);
                 console.log('=== SUPABASE UPLOAD COMPLETED ===');
                 
                 return publicUrl;
@@ -2133,8 +2133,8 @@ Common issues:
             try {
                 if (typeof supabase !== 'undefined') {
                     window.supabaseClient = supabase.createClient(
-                        'https://ontuivohwjfkxjwrjnot.supabase.co',
-                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9udHVpdm9od2pma3hqd3Jqbm90Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUyNzA3NjIsImV4cCI6MjA1MDg0Njc2Mn0.HB46hZCf7xhcVIhz6HUkhpAGCYDh8HPE1Xp_xvGnxsI'
+                        'https://uaiiwhvulplvzfvtlegt.supabase.co',
+                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhaWl3aHZ1bHBsdnpmdnRsZWd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjU5MjgsImV4cCI6MjA5MTkwMTkyOH0.AEV4LF_6n6Lf4O9dzcjUgi2lMVA_6pIFN0BZnz4P33k'
                     );
                     console.log('Supabase client initialized successfully');
                 } else {
@@ -2251,10 +2251,10 @@ Common issues:
                     }
                 });
                 
-                console.log('✅ Password toggle setup complete');
+                console.log('âœ… Password toggle setup complete');
                 return true;
             } else {
-                console.error('❌ Password toggle elements not found');
+                console.error('âŒ Password toggle elements not found');
                 return false;
             }
         }
@@ -2288,14 +2288,14 @@ Common issues:
                 if (passwordInput.type === 'password') {
                     passwordInput.type = 'text';
                     if (icon) icon.className = 'fas fa-eye-slash';
-                    console.log('✅ Manually changed to visible');
+                    console.log('âœ… Manually changed to visible');
                 } else {
                     passwordInput.type = 'password';
                     if (icon) icon.className = 'fas fa-eye';
-                    console.log('✅ Manually changed to hidden');
+                    console.log('âœ… Manually changed to hidden');
                 }
             } else {
-                console.error('❌ Elements not found for manual test');
+                console.error('âŒ Elements not found for manual test');
             }
         };
 
@@ -2347,3 +2347,5 @@ Common issues:
     </script>
 </body>
 </html>
+
+
